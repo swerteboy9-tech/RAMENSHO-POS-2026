@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="tl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -27,6 +27,8 @@ nav.toc a { color: var(--red); text-decoration: none; }
 section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
 h2 { margin: 0 0 10px; font-size: 20px; display: flex; gap: 10px; align-items: center; }
 h2 .n { background: var(--red); color: #fff; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex: none; }
+h2 { flex-wrap: wrap; row-gap: 0; }
+h2 small { font-weight: 500; color: var(--muted); font-size: 14px; flex-basis: 100%; padding-left: 40px; }
 h3 { font-size: 16px; margin: 16px 0 6px; }
 ol.steps { padding-left: 22px; margin: 6px 0; }
 ol.steps li { margin: 6px 0; }
@@ -42,7 +44,7 @@ th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line
 th { background: #f1e9db; }
 .day { display: grid; gap: 8px; }
 .day div { display: flex; gap: 10px; align-items: flex-start; }
-.day .t { flex: none; width: 70px; font-weight: 800; color: var(--red); }
+.day .t { flex: none; width: 74px; font-weight: 800; color: var(--red); }
 footer { text-align: center; color: var(--muted); font-size: 13px; padding: 4px 16px 28px; }
 @media (max-width: 520px) { nav.toc ol { columns: 1; } }
 @media print {
@@ -56,51 +58,52 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 4px 
 <body>
 <header><div class="wrap">
   <span class="kanji">昇</span>
-  <div><h1>RAMEN SHO POS — Staff Guide</h1><p>How to use the POS on your phone, from check-in to closing.</p></div>
+  <div><h1>RAMEN SHO POS — Staff Guide</h1><p>Paano gamitin ang POS sa phone mo, mula check-in hanggang closing.</p></div>
 </div></header>
 
 <main class="wrap">
 
-<nav class="toc"><b>Contents</b>
+<nav class="toc"><b>Contents / Laman</b>
 <ol>
   <li><a href="#setup">First time setup</a></li>
-  <li><a href="#day">Your shift at a glance</a></li>
-  <li><a href="#start">Start of shift</a></li>
-  <li><a href="#order">Taking an order</a></li>
+  <li><a href="#day">Ang shift mo sa isang tingin</a></li>
+  <li><a href="#start">Simula ng shift</a></li>
+  <li><a href="#meal">Meal allowance ₱100</a></li>
+  <li><a href="#order">Pagkuha ng order</a></li>
   <li><a href="#kitchen">Kitchen screen</a></li>
   <li><a href="#soldout">Sold out items</a></li>
-  <li><a href="#expense">Buying with register money</a></li>
-  <li><a href="#money">Other money in / out</a></li>
+  <li><a href="#expense">Pagbili gamit ang pera ng drawer</a></li>
+  <li><a href="#money">Ibang pera in / out</a></li>
   <li><a href="#stock">Stock check</a></li>
-  <li><a href="#close">End of shift</a></li>
-  <li><a href="#fix">Fixing mistakes</a></li>
-  <li><a href="#help">Problems &amp; rules</a></li>
+  <li><a href="#close">Katapusan ng shift</a></li>
+  <li><a href="#fix">Pag-ayos ng mali</a></li>
+  <li><a href="#help">Problema at rules</a></li>
 </ol></nav>
 
 <section id="setup">
-<h2><span class="n">1</span>First time setup (only once)</h2>
+<h2><span class="n">1</span>First time setup <small>— isang beses lang</small></h2>
 <ol class="steps">
-  <li>Open this link on your phone: <b>swerteboy9-tech.github.io/RAMENSHO-POS-2026</b></li>
-  <li>Add it to your home screen:
+  <li>Buksan ang link na ito sa phone mo: <b>swerteboy9-tech.github.io/RAMENSHO-POS-2026</b></li>
+  <li>I-add sa home screen:
     <ul>
-      <li><b>Android (Chrome):</b> tap <b>⋮</b> (top right) → <b>Add to Home screen</b></li>
-      <li><b>iPhone (Safari):</b> tap the Share button → <b>Add to Home Screen</b></li>
+      <li><b>Android (Chrome):</b> i-tap ang <b>⋮</b> (taas, kanan) → <b>Add to Home screen</b></li>
+      <li><b>iPhone (Safari):</b> i-tap ang Share button → <b>Add to Home Screen</b></li>
     </ul></li>
-  <li>Open the app from the 昇 icon. On <span class="btn">🏠 HOME</span>, choose <b>your own name</b> under <b>“Today's staff”</b>. You only do this once on your phone.</li>
+  <li>Buksan ang app gamit ang 昇 icon. Sa <span class="btn">🏠 HOME</span>, piliin ang <b>pangalan mo</b> sa <b>“Today's staff”</b>. Isang beses mo lang ito gagawin sa phone mo.</li>
 </ol>
-<div class="rule">Use <b>your own phone</b> and <b>your own name</b>. Your check-in time and pay come from this.</div>
+<div class="rule">Gamitin ang <b>sarili mong phone</b> at <b>sarili mong pangalan</b>. Dito galing ang oras ng check-in mo at ang sweldo mo.</div>
 </section>
 
 <section id="day">
-<h2><span class="n">2</span>Your shift at a glance</h2>
+<h2><span class="n">2</span>Ang shift mo sa isang tingin</h2>
 <div class="day">
-  <div><span class="t">Arrive</span><span><span class="btn green">CHECK IN</span> on HOME. If the register is closed, open it (count cash, GCash, stock). Take your ₱100 meal allowance from the drawer.</span></div>
-  <div><span class="t">Service</span><span>Every sale goes in <span class="btn">🍜 ORDER</span>. Kitchen uses <span class="btn">👨‍🍳 KITCHEN</span>. Anything bought with drawer money goes in <span class="btn">🧾 EXPENSE</span>.</span></div>
-  <div><span class="t">15:00</span><span>Stock check before the dinner rush (the app reminds you).</span></div>
-  <div><span class="t">Leave</span><span><span class="btn red">CHECK OUT</span>. If you opened the register or you are the last one, close the register first (count cash, GCash, stock).</span></div>
+  <div><span class="t">Pagdating</span><span>I-tap ang <span class="btn green">CHECK IN</span> sa HOME. Kung sarado pa ang register, buksan mo (bilangin ang cash, GCash at stock). Kunin ang ₱100 meal allowance sa drawer.</span></div>
+  <div><span class="t">Service</span><span>Lahat ng benta → <span class="btn">🍜 ORDER</span>. Sa kusina → <span class="btn">👨‍🍳 KITCHEN</span>. Lahat ng binili gamit ang pera ng drawer → <span class="btn">🧾 EXPENSE</span>.</span></div>
+  <div><span class="t">15:00</span><span>Stock check bago ang dinner rush (may paalala ang app).</span></div>
+  <div><span class="t">Pag-uwi</span><span>I-tap ang <span class="btn red">CHECK OUT</span>. Kung ikaw ang nagbukas ng register o ikaw ang huling aalis, i-close muna ang register (bilangin ang cash, GCash at stock).</span></div>
 </div>
 <table>
-  <tr><th>Shift</th><th>Time</th></tr>
+  <tr><th>Shift</th><th>Oras</th></tr>
   <tr><td>Lunch</td><td>09:00 – 17:00</td></tr>
   <tr><td>Middle</td><td>15:00 – 23:00</td></tr>
   <tr><td>Night</td><td>16:00 – 24:00</td></tr>
@@ -108,170 +111,182 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 4px 
 </section>
 
 <section id="start">
-<h2><span class="n">3</span>Start of shift</h2>
+<h2><span class="n">3</span>Simula ng shift</h2>
 <h3>Check in</h3>
 <ol class="steps">
-  <li>On <span class="btn">🏠 HOME</span>, make sure your name is selected.</li>
-  <li>Tap <span class="btn green">CHECK IN</span>. It shows “🟢 On duty since …”.</li>
+  <li>Sa <span class="btn">🏠 HOME</span>, siguraduhing pangalan mo ang naka-select.</li>
+  <li>I-tap ang <span class="btn green">CHECK IN</span>. Lalabas ang “🟢 On duty since …”.</li>
 </ol>
-<h3>Open the register (first person of the shift)</h3>
-<p>If HOME says <b>🔒 Register is closed</b>, tap it (or <span class="btn">💵 SHIFT</span>) and fill in:</p>
+<h3>Buksan ang register <small>(unang tao sa shift)</small></h3>
+<p>Kung nakasulat sa HOME ang <b>🔒 Register is closed</b>, i-tap ito (o ang <span class="btn">💵 SHIFT</span>) at punan:</p>
 <ol class="steps">
-  <li><b>Count the cash in the drawer</b> and enter it. The app shows what the last shift left. If it is different, tell the owner.</li>
-  <li><b>Store GCash balance</b> — open the shop GCash app and copy the balance.</li>
-  <li>Choose the <b>Shift</b> and the <b>Weather</b>.</li>
-  <li><b>Count the stock.</b> Numbers are filled in from the last close — change only what is different. For chashu, ground pork, chili oil, green onion and lard, tap <b>Enough / Low / Out</b>.</li>
-  <li>Tap <span class="btn">OPEN REGISTER</span>.</li>
+  <li><b>Bilangin ang cash sa drawer</b> at ilagay. Makikita mo kung magkano ang iniwan ng huling shift. Kung iba, sabihin agad sa owner.</li>
+  <li><b>Store GCash balance</b> — buksan ang GCash app ng shop at kopyahin ang balance.</li>
+  <li>Piliin ang <b>Shift</b> at ang <b>Weather</b> (panahon).</li>
+  <li><b>Bilangin ang stock.</b> Naka-fill na ang mga numero mula sa huling closing — palitan lang kung iba. Para sa chashu, ground pork, chili oil, green onion at lard, i-tap ang <b>Enough / Low / Out</b>.</li>
+  <li>I-tap ang <span class="btn">OPEN REGISTER</span>.</li>
 </ol>
-<div class="tip"><b>Meal allowance ₱100:</b> after you check in (and the register is open), the app says “Meal allowance ₱100 — take it from the drawer”. Take ₱100 from the drawer. It is already recorded — do <b>not</b> enter it again in EXPENSE.</div>
-<div class="warn">Open the register <b>only once</b> per shift. If someone already opened it, just check in.</div>
+<div class="warn">Isang beses lang bubuksan ang register bawat shift. Kung may nagbukas na, mag-check in ka na lang.</div>
+</section>
+
+<section id="meal">
+<h2><span class="n">4</span>Meal allowance ₱100 <small>— galing sa drawer</small></h2>
+<ul>
+  <li>Bawat staff ay may <b>₱100 meal allowance kada araw</b>, cash, galing sa benta ng araw na iyon (sa drawer).</li>
+  <li>Pag nag-check in ka at bukas ang register, lalabas ang “<b>Meal allowance ₱100 — take it from the drawer</b>”. <b>Kunin ang ₱100 sa drawer.</b></li>
+  <li>Kung sarado pa ang register pag nag-check in ka, kusa itong mare-record pagbukas ng register (sa loob ng 30 seconds).</li>
+  <li>Naka-record na ito nang automatic — <b>huwag nang ilagay ulit sa EXPENSE</b>, kasi magiging doble.</li>
+  <li>Isang beses lang kada araw, kahit mag-check in ka ulit.</li>
+</ul>
+<div class="tip">Kasama na ang ₱100 sa bilang ng drawer sa closing, kaya magtutugma pa rin ang cash. Hiwalay ito sa sweldo mo — hindi ito ibabawas sa sweldo.</div>
 </section>
 
 <section id="order">
-<h2><span class="n">4</span>Taking an order</h2>
+<h2><span class="n">5</span>Pagkuha ng order</h2>
 <ol class="steps">
-  <li>Tap <span class="btn">🍜 ORDER</span>. Use the tabs (Ramen, B1T1, Don, Side, Drink) to find items.</li>
-  <li>Tap an item. Add <b>toppings</b> (kaedama, ajitama, extra chashu), a <b>note for kitchen</b> (e.g. “less spicy”), and the <b>quantity</b>. Tap <span class="btn">ADD TO ORDER</span>.</li>
-  <li>When everything is added, tap <span class="btn">🛒 CHECKOUT</span>.</li>
-  <li>Choose <b>DINE-IN</b> or <b>TAKE-OUT</b>, set the number of <b>Guests</b>, and type the table no. or customer name.</li>
-  <li>Choose <b>CASH</b> or <b>GCASH</b>. For cash, tap the amount the customer gave — the app shows the <b>change</b>.</li>
-  <li>Tap <span class="btn">COMPLETE ORDER</span>. The order appears on the kitchen screen of every phone.</li>
+  <li>I-tap ang <span class="btn">🍜 ORDER</span>. Gamitin ang tabs (Ramen, B1T1, Don, Side, Drink) para hanapin ang item.</li>
+  <li>I-tap ang item. Magdagdag ng <b>toppings</b> (kaedama, ajitama, extra chashu), <b>note for kitchen</b> (hal. “less spicy”), at <b>quantity</b>. I-tap ang <span class="btn">ADD TO ORDER</span>.</li>
+  <li>Pag kumpleto na, i-tap ang <span class="btn">🛒 CHECKOUT</span>.</li>
+  <li>Piliin ang <b>DINE-IN</b> o <b>TAKE-OUT</b>, ilagay ang bilang ng <b>Guests</b>, at i-type ang table no. o pangalan ng customer.</li>
+  <li>Piliin ang <b>CASH</b> o <b>GCASH</b>. Kung cash, i-tap ang halagang ibinigay ng customer — ipapakita ng app ang <b>sukli (change)</b>.</li>
+  <li>I-tap ang <span class="btn">COMPLETE ORDER</span>. Lalabas ang order sa kitchen screen ng lahat ng phone.</li>
 </ol>
-<div class="rule"><b>B1T1 (Buy 1 Take 1)</b> = 2 bowls at a special price (e.g. Tonkotsu × Tonkotsu ₱280 instead of ₱398). It is for <b>dine-in only</b>: <b>both bowls must be eaten in the shop.</b> If even one bowl is taken out, do not use B1T1 — enter the bowls at the normal price as <b>two orders</b>: the bowl eaten here as DINE-IN, the bowl taken home as a separate TAKE-OUT order (it gets the container fee). The app will not allow B1T1 as take-out.<br>
-<b>Take-out containers</b> are added automatically: ₱15 for ramen / don / rice, ₱10 for sides.</div>
-<div class="tip">If the app shows “🍜＋🍚 can be a set — save ₱…”, tell the customer and tap <b>Make set</b> if they agree.</div>
-<div class="warn">For GCash, check the payment on the shop GCash <b>before</b> you tap COMPLETE ORDER.</div>
+<div class="rule"><b>B1T1 (Buy 1 Take 1)</b> = 2 bowls sa special price (hal. Tonkotsu × Tonkotsu ₱280 imbes na ₱398). <b>Dine-in lang ito: dapat parehong bowl ay kakainin sa loob ng shop.</b><br>
+Kung kahit isang bowl ay iuuwi, <b>huwag gamitin ang B1T1</b> — gumawa ng <b>dalawang order</b> sa normal price: DINE-IN para sa bowl na kakainin dito, at hiwalay na TAKE-OUT para sa bowl na iuuwi. Hindi papayagan ng app ang B1T1 bilang take-out.</div>
+<div class="rule"><b>Take-out container</b> — kusang idinadagdag: ₱15 para sa ramen / don / rice, ₱10 para sa sides. Walang bayad ang drinks.</div>
+<div class="tip">Kung lumabas ang “🍜＋🍚 can be a set — save ₱…”, sabihin sa customer at i-tap ang <b>Make set</b> kung gusto nila.</div>
+<div class="warn">Sa GCash, i-check muna na pumasok ang bayad sa GCash ng shop <b>bago</b> i-tap ang COMPLETE ORDER.</div>
 </section>
 
 <section id="kitchen">
-<h2><span class="n">5</span>Kitchen screen</h2>
+<h2><span class="n">6</span>Kitchen screen</h2>
 <ol class="steps">
-  <li>Tap <span class="btn">👨‍🍳 KITCHEN</span>. Orders are shown oldest first, with the minutes waiting.</li>
-  <li>Cook from the top. When the order is given to the customer, tap <span class="btn">✓ SERVED</span>.</li>
-  <li>A ticket turns red after <b>15 minutes</b> — serve it first.</li>
-  <li>Tapped SERVED by mistake? Tap <b>Show served orders</b> → <b>↩ Undo</b>.</li>
+  <li>I-tap ang <span class="btn">👨‍🍳 KITCHEN</span>. Nauuna ang pinakamatagal na order, kasama ang minutong naghihintay.</li>
+  <li>Lutuin mula sa taas. Pag naibigay na sa customer, i-tap ang <span class="btn">✓ SERVED</span>.</li>
+  <li>Nagiging pula ang ticket pagkalipas ng <b>15 minutes</b> — unahin ito.</li>
+  <li>Napindot ang SERVED nang mali? I-tap ang <b>Show served orders</b> → <b>↩ Undo</b>.</li>
 </ol>
-<div class="tip">How to cook each bowl: <span class="btn">📖 RECIPES</span> on HOME. Tonkotsu and chashu-men use <b>white</b> noodles; tantanmen uses <b>yellow</b> noodles.</div>
+<div class="tip">Paano lutuin ang bawat bowl: <span class="btn">📖 RECIPES</span> sa HOME. <b>White noodles</b> para sa tonkotsu at chashu-men; <b>yellow noodles</b> para sa tantanmen.</div>
 </section>
 
 <section id="soldout">
-<h2><span class="n">6</span>Sold out items</h2>
+<h2><span class="n">7</span>Sold out items</h2>
 <ol class="steps">
-  <li>On <span class="btn">🍜 ORDER</span>, tap <b>⛔ Mark an item sold out</b>.</li>
-  <li>Tap the item. It becomes SOLD OUT on every phone. Tap it again when it is back.</li>
-  <li>Tap <b>✓ Done marking sold out</b>.</li>
+  <li>Sa <span class="btn">🍜 ORDER</span>, i-tap ang <b>⛔ Mark an item sold out</b>.</li>
+  <li>I-tap ang item. Magiging SOLD OUT ito sa lahat ng phone. I-tap ulit pag meron na ulit.</li>
+  <li>I-tap ang <b>✓ Done marking sold out</b>.</li>
 </ol>
-<p>If an item shows a warning that it may be out, the stock count says that ingredient is gone. Check in the kitchen before you take the order.</p>
-<div class="rule">Always mark sold out items — the owner uses this to know how much we lost and to prepare more next time.</div>
+<p>Kung may babala sa item na baka ubos na, ibig sabihin ubos na ang ingredient ayon sa stock count. I-check muna sa kusina bago kunin ang order.</p>
+<div class="rule">Laging i-mark ang sold out — dito nalalaman ng owner kung magkano ang nawalang benta at kung gaano karami ang ihahanda sa susunod.</div>
 </section>
 
 <section id="expense">
-<h2><span class="n">7</span>Buying with register money</h2>
-<p>Every time money leaves the drawer to buy something, record it — or the cash will not match at closing.</p>
+<h2><span class="n">8</span>Pagbili gamit ang pera ng drawer</h2>
+<p>Tuwing may perang lumabas sa drawer para bumili, i-record ito — kung hindi, hindi magtutugma ang cash sa closing.</p>
 <ol class="steps">
-  <li>Tap <span class="btn">🧾 EXPENSE</span>.</li>
-  <li>Tap what you bought (e.g. <b>Eggs 30pcs</b>, <b>Green onion</b>, <b>LPG</b>). If it is not in the list, tap <b>＋ Enter manually</b>.</li>
-  <li>Check the <b>Quantity</b> and the <b>Amount (₱)</b> — use the amount on the receipt.</li>
-  <li><b>Paid from:</b>
+  <li>I-tap ang <span class="btn">🧾 EXPENSE</span>.</li>
+  <li>I-tap ang binili mo (hal. <b>Eggs 30pcs</b>, <b>Green onion</b>, <b>LPG</b>). Kung wala sa listahan, i-tap ang <b>＋ Enter manually</b>.</li>
+  <li>I-check ang <b>Quantity</b> at <b>Amount (₱)</b> — gamitin ang halaga sa resibo.</li>
+  <li><b>Paid from</b> (saan galing ang bayad):
     <ul>
-      <li><b>💵 Register cash</b> — taken from the drawer</li>
-      <li><b>📱 Store GCash</b> — paid from the shop GCash</li>
-      <li><b>👤 Owner / outside</b> — the owner paid, not the register</li>
+      <li><b>💵 Register cash</b> — kinuha sa drawer</li>
+      <li><b>📱 Store GCash</b> — binayaran gamit ang GCash ng shop</li>
+      <li><b>👤 Owner / outside</b> — ang owner ang nagbayad, hindi ang register</li>
     </ul></li>
-  <li>Tap <span class="btn">SAVE EXPENSE</span>. Keep the receipt.</li>
+  <li>I-tap ang <span class="btn">SAVE EXPENSE</span>. Itago ang resibo.</li>
 </ol>
-<h3>Salary advance / on-call pay</h3>
-<p>On the EXPENSE screen, tap <b>💸 Salary advance</b> or <b>📞 On-call day pay</b> (₱600). Choose who receives it, check the amount, then tap <b>SAVE</b>. The owner will see it in payroll — an advance is deducted on payday.</p>
-<div class="warn">Pay advances only when the owner says yes.</div>
+<h3>Salary advance (bale) / On-call pay</h3>
+<p>Sa EXPENSE screen, i-tap ang <b>💸 Salary advance</b> o <b>📞 On-call day pay</b> (₱600). Piliin kung sino ang tatanggap, i-check ang halaga, at i-tap ang <b>SAVE</b>. Makikita ito ng owner sa payroll — ang advance ay ibabawas sa sweldo sa payday.</p>
+<div class="warn">Magbigay lang ng advance kung pumayag ang owner.</div>
 </section>
 
 <section id="money">
-<h2><span class="n">8</span>Other money in / out</h2>
-<p>For money that is <b>not a sale and not a purchase</b>: <span class="btn">💵 SHIFT</span> → <b>💱 Money in / out</b>.</p>
+<h2><span class="n">9</span>Ibang pera in / out</h2>
+<p>Para sa perang <b>hindi benta at hindi pambili</b>: <span class="btn">💵 SHIFT</span> → <b>💱 Money in / out</b>.</p>
 <table>
-  <tr><th>Choose</th><th>When</th></tr>
-  <tr><td>➕ Owner adds cash to the drawer</td><td>Owner gives change / coins</td></tr>
-  <tr><td>➖ Owner takes cash from the drawer</td><td>Owner collects money during the shift</td></tr>
-  <tr><td>🔁 Cash from drawer → store GCash</td><td>Cash deposited into the shop GCash</td></tr>
-  <tr><td>🔁 Store GCash → cash in drawer</td><td>Cash-out from the shop GCash into the drawer</td></tr>
+  <tr><th>Piliin</th><th>Kailan</th></tr>
+  <tr><td>➕ Owner adds cash to the drawer</td><td>Nagbigay ang owner ng panukli / barya</td></tr>
+  <tr><td>➖ Owner takes cash from the drawer</td><td>Kinuha ng owner ang pera habang shift</td></tr>
+  <tr><td>🔁 Cash from drawer → store GCash</td><td>Ipinasok ang cash sa GCash ng shop</td></tr>
+  <tr><td>🔁 Store GCash → cash in drawer</td><td>Nag-cash out mula sa GCash ng shop papunta sa drawer</td></tr>
 </table>
-<p>Enter the amount and a short note, then tap <b>SAVE</b>.</p>
+<p>Ilagay ang halaga at maikling note, tapos i-tap ang <b>SAVE</b>.</p>
 </section>
 
 <section id="stock">
-<h2><span class="n">9</span>Stock check — so we never run out</h2>
-<p>The app counts down stock with every order. It tells you <b>what to prep or buy today</b>, because prep takes time:</p>
+<h2><span class="n">10</span>Stock check — para hindi tayo maubusan</h2>
+<p>Binabawasan ng app ang stock sa bawat order. Sinasabi nito <b>kung ano ang dapat i-prep o bilhin ngayon</b>, kasi may oras ang paghahanda:</p>
 <table>
-  <tr><th>Item</th><th>Time needed</th></tr>
-  <tr><td>Ajitama, chashu, karaage (marinate), kaeshi</td><td>1 day</td></tr>
-  <tr><td>Noodles, soup base (KANDS)</td><td>2 days after ordering</td></tr>
+  <tr><th>Item</th><th>Gaano katagal</th></tr>
+  <tr><td>Ajitama, chashu, karaage (marinate), kaeshi</td><td>1 araw</td></tr>
+  <tr><td>Noodles, soup base (KANDS)</td><td>2 araw pagka-order</td></tr>
 </table>
-<h3>Colors</h3>
+<h3>Mga kulay</h3>
 <table>
   <tr><td>🟢</td><td>OK</td></tr>
-  <tr><td>🟡</td><td>Getting low — watch it</td></tr>
-  <tr><td>🔴</td><td>At the prep point — <b>prep / order today</b></td></tr>
-  <tr><td>⛔</td><td>Out</td></tr>
-  <tr><td>⚪</td><td>Not counted yet</td></tr>
+  <tr><td>🟡</td><td>Paubos na — bantayan</td></tr>
+  <tr><td>🔴</td><td>Nasa prep point na — <b>mag-prep / mag-order ngayon</b></td></tr>
+  <tr><td>⛔</td><td>Ubos na</td></tr>
+  <tr><td>⚪</td><td>Hindi pa nabibilang</td></tr>
 </table>
 <h3>15:00 check</h3>
-<p>At 15:00 HOME shows <b>⏰ 15:00 stock check</b>. Tap it, count, then tap <b>SAVE CHECK</b>. You can also count any time: <span class="btn">📦 STOCK</span> → <b>🔄 Quick check</b>.</p>
-<h3>Record changes on <span class="btn">📦 STOCK</span></h3>
+<p>Pagdating ng 15:00, lalabas sa HOME ang <b>⏰ 15:00 stock check</b>. I-tap, bilangin, tapos i-tap ang <b>SAVE CHECK</b>. Pwede ring magbilang kahit kailan: <span class="btn">📦 STOCK</span> → <b>🔄 Quick check</b>.</p>
+<h3>I-record ang pagbabago sa <span class="btn">📦 STOCK</span></h3>
 <table>
-  <tr><td><b>📥 Received / prepared</b></td><td>Delivery arrived, or you finished prep (e.g. 30 ajitama)</td></tr>
-  <tr><td><b>🗑 Waste</b></td><td>Thrown away (spoiled, dropped)</td></tr>
-  <tr><td><b>🍜 Staff food / free</b></td><td>Staff meal or free item</td></tr>
-  <tr><td><b>↗ Other out</b></td><td>Anything else that left</td></tr>
+  <tr><td><b>📥 Received / prepared</b></td><td>Dumating ang delivery, o natapos mong i-prep (hal. 30 ajitama)</td></tr>
+  <tr><td><b>🗑 Waste</b></td><td>Itinapon (sira, nahulog)</td></tr>
+  <tr><td><b>🍜 Staff food / free</b></td><td>Pagkain ng staff o libreng item</td></tr>
+  <tr><td><b>↗ Other out</b></td><td>Iba pang lumabas</td></tr>
 </table>
-<div class="rule">If HOME shows <b>🧾 To prep / buy today</b>, tell the owner or the next shift right away. Do not wait until it is gone.</div>
+<div class="rule">Kung lumabas sa HOME ang <b>🧾 To prep / buy today</b>, sabihin agad sa owner o sa susunod na shift. Huwag hintaying maubos.</div>
 </section>
 
 <section id="close">
-<h2><span class="n">10</span>End of shift</h2>
+<h2><span class="n">11</span>Katapusan ng shift</h2>
 <ol class="steps">
-  <li>Tap <span class="btn red">CHECK OUT</span> on HOME.</li>
-  <li>If you opened the register (or you are the last one on duty), the app asks to <b>close the register</b> first. Tap <b>OK</b>.</li>
-  <li><b>Count the cash</b> in the drawer. The app shows <b>✓ Matches</b>, or <b>Over / Short ₱…</b>.</li>
-  <li>Enter the <b>store GCash balance</b> from the GCash app.</li>
-  <li><b>Count the stock</b> (same list as opening). The app shows how many there should be.</li>
-  <li><b>Cash taken out for the owner / deposit</b> — enter it if you hand money to the owner. The app shows what is left for the next shift.</li>
-  <li>If cash is over or short, write the reason in <b>Note</b>.</li>
-  <li>Tap <span class="btn red">CLOSE REGISTER &amp; CHECK OUT</span>. Read the summary (cash, GCash, stock, to-prep list).</li>
+  <li>I-tap ang <span class="btn red">CHECK OUT</span> sa HOME.</li>
+  <li>Kung ikaw ang nagbukas ng register (o ikaw ang huling naka-duty), tatanungin ka ng app na <b>i-close muna ang register</b>. I-tap ang <b>OK</b>.</li>
+  <li><b>Bilangin ang cash</b> sa drawer. Ipapakita ng app ang <b>✓ Matches</b>, o <b>Over / Short ₱…</b>.</li>
+  <li>Ilagay ang <b>store GCash balance</b> mula sa GCash app.</li>
+  <li><b>Bilangin ang stock</b> (parehong listahan noong opening). Ipapakita ng app kung ilan dapat.</li>
+  <li><b>Cash taken out for the owner / deposit</b> — ilagay kung may iaabot kang pera sa owner. Ipapakita ng app kung magkano ang maiiwan para sa susunod na shift.</li>
+  <li>Kung over o short ang cash, isulat ang dahilan sa <b>Note</b>.</li>
+  <li>I-tap ang <span class="btn red">CLOSE REGISTER &amp; CHECK OUT</span>. Basahin ang summary (cash, GCash, stock, listahan ng ipe-prep).</li>
 </ol>
-<div class="warn">Not matching? First check: an expense not recorded, a GCash sale entered as CASH, or a missed order. Fix it in HISTORY, then tell the owner.</div>
+<div class="warn">Hindi tugma? I-check muna: may expense na hindi na-record, GCash na benta na nailagay bilang CASH, o order na nakalimutan. Ayusin sa HISTORY, tapos sabihin sa owner.</div>
 </section>
 
 <section id="fix">
-<h2><span class="n">11</span>Fixing mistakes</h2>
+<h2><span class="n">12</span>Pag-ayos ng mali</h2>
 <ul>
-  <li><b>Wrong order:</b> <span class="btn">🕘 HISTORY</span> → tap the day → <b>Edit</b> or <b>Delete</b>.</li>
-  <li><b>Wrong expense:</b> HISTORY → <b>EXPENSES</b> tab → <b>Edit</b> or <b>Delete</b>.</li>
-  <li><b>Forgot to enter an order:</b> enter it as usual and change <b>Order date &amp; time</b> on the checkout screen.</li>
-  <li><b>Forgot to check out yesterday:</b> next time you tap CHECK OUT, the app asks what time you really left. Type it as HH:MM (e.g. 21:30).</li>
-  <li><b>Wrong stock record:</b> STOCK → “Recorded this shift” → <b>Delete</b>.</li>
+  <li><b>Maling order:</b> <span class="btn">🕘 HISTORY</span> → i-tap ang araw → <b>Edit</b> o <b>Delete</b>.</li>
+  <li><b>Maling expense:</b> HISTORY → <b>EXPENSES</b> tab → <b>Edit</b> o <b>Delete</b>.</li>
+  <li><b>Nakalimutang i-enter ang order:</b> i-enter as usual at palitan ang <b>Order date &amp; time</b> sa checkout screen.</li>
+  <li><b>Nakalimutang mag-check out kahapon:</b> sa susunod na pag-tap mo ng CHECK OUT, tatanungin ng app kung anong oras ka talaga umuwi. I-type bilang HH:MM (hal. 21:30).</li>
+  <li><b>Maling stock record:</b> STOCK → “Recorded this shift” → <b>Delete</b>.</li>
 </ul>
 </section>
 
 <section id="help">
-<h2><span class="n">12</span>Problems &amp; rules</h2>
-<h3>The sign at the top right</h3>
+<h2><span class="n">13</span>Problema at rules</h2>
+<h3>Ang nakasulat sa taas, kanan</h3>
 <table>
-  <tr><td><b>✓ synced 10:52</b></td><td>All good — everything is saved to the sheet.</td></tr>
-  <tr><td><b>⏳ 3 to send</b></td><td>No internet right now. Keep working — it sends by itself when the internet is back.</td></tr>
+  <tr><td><b>✓ synced 10:52</b></td><td>Ayos — naka-save na lahat sa sheet.</td></tr>
+  <tr><td><b>⏳ 3 to send</b></td><td>Walang internet ngayon. Tuloy lang ang trabaho — kusa itong magse-send pagbalik ng internet.</td></tr>
 </table>
 <h3>Rules</h3>
 <ul>
-  <li><b>Every sale goes in the POS.</b> No paper notes.</li>
-  <li>Use <b>your own name</b>. Never check in for another person.</li>
-  <li>Do <b>not</b> delete the app or clear the browser data while “⏳ to send” is showing — those records would be lost.</li>
-  <li>Keep every receipt for expenses.</li>
-  <li>Prices and the menu come from the owner. If a price looks wrong, tell the owner — do not change it yourself.</li>
-  <li>If “Two registers are open” appears, close both and count the cash only once.</li>
+  <li><b>Lahat ng benta ay dapat nasa POS.</b> Walang papel na listahan.</li>
+  <li>Gamitin ang <b>sarili mong pangalan</b>. Huwag kailanman mag-check in para sa ibang tao.</li>
+  <li><b>Huwag i-delete ang app o i-clear ang browser data</b> habang may “⏳ to send” — mawawala ang mga record na iyon.</li>
+  <li>Itago ang lahat ng resibo ng expense.</li>
+  <li>Ang owner ang nagtatakda ng presyo at menu. Kung mukhang mali ang presyo, sabihin sa owner — huwag itong baguhin nang mag-isa.</li>
+  <li>Kung lumabas ang “Two registers are open”, i-close pareho at isang beses lang bilangin ang cash.</li>
 </ul>
-<div class="tip">Menu looks old? <span class="btn">🍜 ORDER</span> → scroll down → <b>🔄 Refresh menu</b>.</div>
+<div class="tip">Luma ang menu? <span class="btn">🍜 ORDER</span> → mag-scroll pababa → <b>🔄 Refresh menu</b>.</div>
 </section>
 
 </main>
-<footer>RAMEN SHO（昇）· Olongapo · POS guide v1 · 2026-10-01</footer>
+<footer>RAMEN SHO（昇）· Olongapo · POS guide v2 (Taglish) · 2026-10-01</footer>
 </body>
 </html>
