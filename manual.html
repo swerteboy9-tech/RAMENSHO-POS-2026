@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1c1614">
+<title>RAMEN SHO POS Guide</title>
+<link rel="icon" href="icon.svg">
+<style>
+:root {
+  --bg: #f6f1e7; --card: #fffdf8; --ink: #1c1614; --muted: #7a6f66; --line: #e6dccb;
+  --red: #b3261e; --gold: #d9a441; --green: #2f7d4f; --soft: #fbeee9;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { background: var(--ink); color: #fff; padding: 20px 16px; }
+header .wrap { display: flex; gap: 14px; align-items: center; }
+.kanji { font-size: 40px; font-weight: 900; color: var(--gold); line-height: 1; }
+header h1 { margin: 0; font-size: 22px; }
+header p { margin: 2px 0 0; color: #d8cfc4; font-size: 14px; }
+.wrap { max-width: 760px; margin: 0 auto; }
+main { padding: 16px; }
+nav.toc { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; margin-bottom: 18px; }
+nav.toc b { display: block; margin-bottom: 6px; }
+nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 24px; }
+nav.toc a { color: var(--red); text-decoration: none; }
+section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+h2 { margin: 0 0 10px; font-size: 20px; display: flex; gap: 10px; align-items: center; }
+h2 .n { background: var(--red); color: #fff; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex: none; }
+h3 { font-size: 16px; margin: 16px 0 6px; }
+ol.steps { padding-left: 22px; margin: 6px 0; }
+ol.steps li { margin: 6px 0; }
+.btn { display: inline-block; background: var(--ink); color: #fff; border-radius: 6px; padding: 0 7px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.btn.red { background: var(--red); }
+.btn.green { background: var(--green); }
+.tip, .warn, .rule { border-radius: 10px; padding: 10px 12px; margin: 10px 0; font-size: 15px; }
+.tip { background: #eef6f0; border-left: 4px solid var(--green); }
+.warn { background: var(--soft); border-left: 4px solid var(--red); }
+.rule { background: #fdf6e6; border-left: 4px solid var(--gold); }
+table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: #f1e9db; }
+.day { display: grid; gap: 8px; }
+.day div { display: flex; gap: 10px; align-items: flex-start; }
+.day .t { flex: none; width: 70px; font-weight: 800; color: var(--red); }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 4px 16px 28px; }
+@media (max-width: 520px) { nav.toc ol { columns: 1; } }
+@media print {
+  body { background: #fff; font-size: 13px; }
+  header { background: #fff; color: var(--ink); border-bottom: 2px solid var(--ink); }
+  header p { color: var(--muted); }
+  section, nav.toc { break-inside: avoid; border-color: #ccc; }
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="kanji">昇</span>
+  <div><h1>RAMEN SHO POS — Staff Guide</h1><p>How to use the POS on your phone, from check-in to closing.</p></div>
+</div></header>
+
+<main class="wrap">
+
+<nav class="toc"><b>Contents</b>
+<ol>
+  <li><a href="#setup">First time setup</a></li>
+  <li><a href="#day">Your shift at a glance</a></li>
+  <li><a href="#start">Start of shift</a></li>
+  <li><a href="#order">Taking an order</a></li>
+  <li><a href="#kitchen">Kitchen screen</a></li>
+  <li><a href="#soldout">Sold out items</a></li>
+  <li><a href="#expense">Buying with register money</a></li>
+  <li><a href="#money">Other money in / out</a></li>
+  <li><a href="#stock">Stock check</a></li>
+  <li><a href="#close">End of shift</a></li>
+  <li><a href="#fix">Fixing mistakes</a></li>
+  <li><a href="#help">Problems &amp; rules</a></li>
+</ol></nav>
+
+<section id="setup">
+<h2><span class="n">1</span>First time setup (only once)</h2>
+<ol class="steps">
+  <li>Open this link on your phone: <b>swerteboy9-tech.github.io/RAMENSHO-POS-2026</b></li>
+  <li>Add it to your home screen:
+    <ul>
+      <li><b>Android (Chrome):</b> tap <b>⋮</b> (top right) → <b>Add to Home screen</b></li>
+      <li><b>iPhone (Safari):</b> tap the Share button → <b>Add to Home Screen</b></li>
+    </ul></li>
+  <li>Open the app from the 昇 icon. On <span class="btn">🏠 HOME</span>, choose <b>your own name</b> under <b>“Today's staff”</b>. You only do this once on your phone.</li>
+</ol>
+<div class="rule">Use <b>your own phone</b> and <b>your own name</b>. Your check-in time and pay come from this.</div>
+</section>
+
+<section id="day">
+<h2><span class="n">2</span>Your shift at a glance</h2>
+<div class="day">
+  <div><span class="t">Arrive</span><span><span class="btn green">CHECK IN</span> on HOME. If the register is closed, open it (count cash, GCash, stock). Take your ₱100 meal allowance from the drawer.</span></div>
+  <div><span class="t">Service</span><span>Every sale goes in <span class="btn">🍜 ORDER</span>. Kitchen uses <span class="btn">👨‍🍳 KITCHEN</span>. Anything bought with drawer money goes in <span class="btn">🧾 EXPENSE</span>.</span></div>
+  <div><span class="t">15:00</span><span>Stock check before the dinner rush (the app reminds you).</span></div>
+  <div><span class="t">Leave</span><span><span class="btn red">CHECK OUT</span>. If you opened the register or you are the last one, close the register first (count cash, GCash, stock).</span></div>
+</div>
+<table>
+  <tr><th>Shift</th><th>Time</th></tr>
+  <tr><td>Lunch</td><td>09:00 – 17:00</td></tr>
+  <tr><td>Middle</td><td>15:00 – 23:00</td></tr>
+  <tr><td>Night</td><td>16:00 – 24:00</td></tr>
+</table>
+</section>
+
+<section id="start">
+<h2><span class="n">3</span>Start of shift</h2>
+<h3>Check in</h3>
+<ol class="steps">
+  <li>On <span class="btn">🏠 HOME</span>, make sure your name is selected.</li>
+  <li>Tap <span class="btn green">CHECK IN</span>. It shows “🟢 On duty since …”.</li>
+</ol>
+<h3>Open the register (first person of the shift)</h3>
+<p>If HOME says <b>🔒 Register is closed</b>, tap it (or <span class="btn">💵 SHIFT</span>) and fill in:</p>
+<ol class="steps">
+  <li><b>Count the cash in the drawer</b> and enter it. The app shows what the last shift left. If it is different, tell the owner.</li>
+  <li><b>Store GCash balance</b> — open the shop GCash app and copy the balance.</li>
+  <li>Choose the <b>Shift</b> and the <b>Weather</b>.</li>
+  <li><b>Count the stock.</b> Numbers are filled in from the last close — change only what is different. For chashu, ground pork, chili oil, green onion and lard, tap <b>Enough / Low / Out</b>.</li>
+  <li>Tap <span class="btn">OPEN REGISTER</span>.</li>
+</ol>
+<div class="tip"><b>Meal allowance ₱100:</b> after you check in (and the register is open), the app says “Meal allowance ₱100 — take it from the drawer”. Take ₱100 from the drawer. It is already recorded — do <b>not</b> enter it again in EXPENSE.</div>
+<div class="warn">Open the register <b>only once</b> per shift. If someone already opened it, just check in.</div>
+</section>
+
+<section id="order">
+<h2><span class="n">4</span>Taking an order</h2>
+<ol class="steps">
+  <li>Tap <span class="btn">🍜 ORDER</span>. Use the tabs (Ramen, B1T1, Don, Side, Drink) to find items.</li>
+  <li>Tap an item. Add <b>toppings</b> (kaedama, ajitama, extra chashu), a <b>note for kitchen</b> (e.g. “less spicy”), and the <b>quantity</b>. Tap <span class="btn">ADD TO ORDER</span>.</li>
+  <li>When everything is added, tap <span class="btn">🛒 CHECKOUT</span>.</li>
+  <li>Choose <b>DINE-IN</b> or <b>TAKE-OUT</b>, set the number of <b>Guests</b>, and type the table no. or customer name.</li>
+  <li>Choose <b>CASH</b> or <b>GCASH</b>. For cash, tap the amount the customer gave — the app shows the <b>change</b>.</li>
+  <li>Tap <span class="btn">COMPLETE ORDER</span>. The order appears on the kitchen screen of every phone.</li>
+</ol>
+<div class="rule"><b>B1T1 (Buy 1 Take 1)</b> = 2 bowls at a special price (e.g. Tonkotsu × Tonkotsu ₱280 instead of ₱398). It is for <b>dine-in only</b>: <b>both bowls must be eaten in the shop.</b> If even one bowl is taken out, do not use B1T1 — enter the bowls at the normal price as <b>two orders</b>: the bowl eaten here as DINE-IN, the bowl taken home as a separate TAKE-OUT order (it gets the container fee). The app will not allow B1T1 as take-out.<br>
+<b>Take-out containers</b> are added automatically: ₱15 for ramen / don / rice, ₱10 for sides.</div>
+<div class="tip">If the app shows “🍜＋🍚 can be a set — save ₱…”, tell the customer and tap <b>Make set</b> if they agree.</div>
+<div class="warn">For GCash, check the payment on the shop GCash <b>before</b> you tap COMPLETE ORDER.</div>
+</section>
+
+<section id="kitchen">
+<h2><span class="n">5</span>Kitchen screen</h2>
+<ol class="steps">
+  <li>Tap <span class="btn">👨‍🍳 KITCHEN</span>. Orders are shown oldest first, with the minutes waiting.</li>
+  <li>Cook from the top. When the order is given to the customer, tap <span class="btn">✓ SERVED</span>.</li>
+  <li>A ticket turns red after <b>15 minutes</b> — serve it first.</li>
+  <li>Tapped SERVED by mistake? Tap <b>Show served orders</b> → <b>↩ Undo</b>.</li>
+</ol>
+<div class="tip">How to cook each bowl: <span class="btn">📖 RECIPES</span> on HOME. Tonkotsu and chashu-men use <b>white</b> noodles; tantanmen uses <b>yellow</b> noodles.</div>
+</section>
+
+<section id="soldout">
+<h2><span class="n">6</span>Sold out items</h2>
+<ol class="steps">
+  <li>On <span class="btn">🍜 ORDER</span>, tap <b>⛔ Mark an item sold out</b>.</li>
+  <li>Tap the item. It becomes SOLD OUT on every phone. Tap it again when it is back.</li>
+  <li>Tap <b>✓ Done marking sold out</b>.</li>
+</ol>
+<p>If an item shows a warning that it may be out, the stock count says that ingredient is gone. Check in the kitchen before you take the order.</p>
+<div class="rule">Always mark sold out items — the owner uses this to know how much we lost and to prepare more next time.</div>
+</section>
+
+<section id="expense">
+<h2><span class="n">7</span>Buying with register money</h2>
+<p>Every time money leaves the drawer to buy something, record it — or the cash will not match at closing.</p>
+<ol class="steps">
+  <li>Tap <span class="btn">🧾 EXPENSE</span>.</li>
+  <li>Tap what you bought (e.g. <b>Eggs 30pcs</b>, <b>Green onion</b>, <b>LPG</b>). If it is not in the list, tap <b>＋ Enter manually</b>.</li>
+  <li>Check the <b>Quantity</b> and the <b>Amount (₱)</b> — use the amount on the receipt.</li>
+  <li><b>Paid from:</b>
+    <ul>
+      <li><b>💵 Register cash</b> — taken from the drawer</li>
+      <li><b>📱 Store GCash</b> — paid from the shop GCash</li>
+      <li><b>👤 Owner / outside</b> — the owner paid, not the register</li>
+    </ul></li>
+  <li>Tap <span class="btn">SAVE EXPENSE</span>. Keep the receipt.</li>
+</ol>
+<h3>Salary advance / on-call pay</h3>
+<p>On the EXPENSE screen, tap <b>💸 Salary advance</b> or <b>📞 On-call day pay</b> (₱600). Choose who receives it, check the amount, then tap <b>SAVE</b>. The owner will see it in payroll — an advance is deducted on payday.</p>
+<div class="warn">Pay advances only when the owner says yes.</div>
+</section>
+
+<section id="money">
+<h2><span class="n">8</span>Other money in / out</h2>
+<p>For money that is <b>not a sale and not a purchase</b>: <span class="btn">💵 SHIFT</span> → <b>💱 Money in / out</b>.</p>
+<table>
+  <tr><th>Choose</th><th>When</th></tr>
+  <tr><td>➕ Owner adds cash to the drawer</td><td>Owner gives change / coins</td></tr>
+  <tr><td>➖ Owner takes cash from the drawer</td><td>Owner collects money during the shift</td></tr>
+  <tr><td>🔁 Cash from drawer → store GCash</td><td>Cash deposited into the shop GCash</td></tr>
+  <tr><td>🔁 Store GCash → cash in drawer</td><td>Cash-out from the shop GCash into the drawer</td></tr>
+</table>
+<p>Enter the amount and a short note, then tap <b>SAVE</b>.</p>
+</section>
+
+<section id="stock">
+<h2><span class="n">9</span>Stock check — so we never run out</h2>
+<p>The app counts down stock with every order. It tells you <b>what to prep or buy today</b>, because prep takes time:</p>
+<table>
+  <tr><th>Item</th><th>Time needed</th></tr>
+  <tr><td>Ajitama, chashu, karaage (marinate), kaeshi</td><td>1 day</td></tr>
+  <tr><td>Noodles, soup base (KANDS)</td><td>2 days after ordering</td></tr>
+</table>
+<h3>Colors</h3>
+<table>
+  <tr><td>🟢</td><td>OK</td></tr>
+  <tr><td>🟡</td><td>Getting low — watch it</td></tr>
+  <tr><td>🔴</td><td>At the prep point — <b>prep / order today</b></td></tr>
+  <tr><td>⛔</td><td>Out</td></tr>
+  <tr><td>⚪</td><td>Not counted yet</td></tr>
+</table>
+<h3>15:00 check</h3>
+<p>At 15:00 HOME shows <b>⏰ 15:00 stock check</b>. Tap it, count, then tap <b>SAVE CHECK</b>. You can also count any time: <span class="btn">📦 STOCK</span> → <b>🔄 Quick check</b>.</p>
+<h3>Record changes on <span class="btn">📦 STOCK</span></h3>
+<table>
+  <tr><td><b>📥 Received / prepared</b></td><td>Delivery arrived, or you finished prep (e.g. 30 ajitama)</td></tr>
+  <tr><td><b>🗑 Waste</b></td><td>Thrown away (spoiled, dropped)</td></tr>
+  <tr><td><b>🍜 Staff food / free</b></td><td>Staff meal or free item</td></tr>
+  <tr><td><b>↗ Other out</b></td><td>Anything else that left</td></tr>
+</table>
+<div class="rule">If HOME shows <b>🧾 To prep / buy today</b>, tell the owner or the next shift right away. Do not wait until it is gone.</div>
+</section>
+
+<section id="close">
+<h2><span class="n">10</span>End of shift</h2>
+<ol class="steps">
+  <li>Tap <span class="btn red">CHECK OUT</span> on HOME.</li>
+  <li>If you opened the register (or you are the last one on duty), the app asks to <b>close the register</b> first. Tap <b>OK</b>.</li>
+  <li><b>Count the cash</b> in the drawer. The app shows <b>✓ Matches</b>, or <b>Over / Short ₱…</b>.</li>
+  <li>Enter the <b>store GCash balance</b> from the GCash app.</li>
+  <li><b>Count the stock</b> (same list as opening). The app shows how many there should be.</li>
+  <li><b>Cash taken out for the owner / deposit</b> — enter it if you hand money to the owner. The app shows what is left for the next shift.</li>
+  <li>If cash is over or short, write the reason in <b>Note</b>.</li>
+  <li>Tap <span class="btn red">CLOSE REGISTER &amp; CHECK OUT</span>. Read the summary (cash, GCash, stock, to-prep list).</li>
+</ol>
+<div class="warn">Not matching? First check: an expense not recorded, a GCash sale entered as CASH, or a missed order. Fix it in HISTORY, then tell the owner.</div>
+</section>
+
+<section id="fix">
+<h2><span class="n">11</span>Fixing mistakes</h2>
+<ul>
+  <li><b>Wrong order:</b> <span class="btn">🕘 HISTORY</span> → tap the day → <b>Edit</b> or <b>Delete</b>.</li>
+  <li><b>Wrong expense:</b> HISTORY → <b>EXPENSES</b> tab → <b>Edit</b> or <b>Delete</b>.</li>
+  <li><b>Forgot to enter an order:</b> enter it as usual and change <b>Order date &amp; time</b> on the checkout screen.</li>
+  <li><b>Forgot to check out yesterday:</b> next time you tap CHECK OUT, the app asks what time you really left. Type it as HH:MM (e.g. 21:30).</li>
+  <li><b>Wrong stock record:</b> STOCK → “Recorded this shift” → <b>Delete</b>.</li>
+</ul>
+</section>
+
+<section id="help">
+<h2><span class="n">12</span>Problems &amp; rules</h2>
+<h3>The sign at the top right</h3>
+<table>
+  <tr><td><b>✓ synced 10:52</b></td><td>All good — everything is saved to the sheet.</td></tr>
+  <tr><td><b>⏳ 3 to send</b></td><td>No internet right now. Keep working — it sends by itself when the internet is back.</td></tr>
+</table>
+<h3>Rules</h3>
+<ul>
+  <li><b>Every sale goes in the POS.</b> No paper notes.</li>
+  <li>Use <b>your own name</b>. Never check in for another person.</li>
+  <li>Do <b>not</b> delete the app or clear the browser data while “⏳ to send” is showing — those records would be lost.</li>
+  <li>Keep every receipt for expenses.</li>
+  <li>Prices and the menu come from the owner. If a price looks wrong, tell the owner — do not change it yourself.</li>
+  <li>If “Two registers are open” appears, close both and count the cash only once.</li>
+</ul>
+<div class="tip">Menu looks old? <span class="btn">🍜 ORDER</span> → scroll down → <b>🔄 Refresh menu</b>.</div>
+</section>
+
+</main>
+<footer>RAMEN SHO（昇）· Olongapo · POS guide v1 · 2026-10-01</footer>
+</body>
+</html>

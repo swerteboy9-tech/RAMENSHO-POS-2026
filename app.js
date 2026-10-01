@@ -233,9 +233,9 @@ function staffCard() {
   const cur = currentStaff(), list = [...new Set([...staffList(), cur].filter(Boolean))];
   const me = myClock();
   return `<div class="card staff-card">
-    <div class="section-title">👤 Who is using this phone</div>
+    <div class="section-title">👤 Today's staff</div>
     <div class="staff-row">
-      <select id="staffSelect" class="input"><option value="">-- Select --</option>
+      <select id="staffSelect" class="input"><option value="">-- Select your name --</option>
         ${list.map(n => `<option ${n === cur ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>
       <button class="btn" data-add-staff>＋ Add</button>
     </div>
@@ -396,7 +396,7 @@ function checkoutView() {
       <div class="cart-side"><b>${peso(lineTotal(l))}</b><button class="link-danger" data-cart-remove="${i}">Remove</button></div>
     </div>`).join('') || '<div class="muted">No items.</div>'}
     ${fees.map(l => `<div class="cart-line fee"><div class="cart-main"><b>🥡 ${esc(l.name)} × ${l.qty}</b><small>added for take-out</small></div><div class="cart-side"><b>${peso(lineTotal(l))}</b></div></div>`).join('')}</div>
-  ${blocked ? `<div class="notice alert">B1T1 is dine-in only. Remove it or switch to DINE-IN.</div>` : ''}
+  ${blocked ? `<div class="notice alert">B1T1 is dine-in only — both bowls must be eaten in the shop. If even one bowl is taken out, remove B1T1 and make two orders at normal price: DINE-IN for the bowl eaten here, TAKE-OUT for the bowl taken home.</div>` : ''}
   ${setOffers().map((o, i) => `<div class="notice set-offer"><span>🍜＋${o.don.icon || '🍚'} <b>${esc(o.ramen.name)} + ${esc(o.don.name)}</b> can be a set — save ${peso(o.saving)}</span>
     <button class="btn small primary" data-make-set="${i}">Make set</button></div>`).join('')}
   <button class="btn wide" data-add-more>＋ Add items</button>
@@ -462,7 +462,7 @@ function resetOrder() {
 function completeOrder() {
   keepCheckoutInputs();
   if (!state.cart.length) return alert('Please add an item.');
-  if (state.mode === 'TAKEOUT' && dineInOnlyInCart().length) return alert('B1T1 is dine-in only. Remove it or switch to DINE-IN.');
+  if (state.mode === 'TAKEOUT' && dineInOnlyInCart().length) return alert('B1T1 is dine-in only — both bowls must be eaten in the shop.\nIf even one bowl is taken out, remove B1T1 and make two orders at normal price: DINE-IN for the bowl eaten here, TAKE-OUT for the bowl taken home.');
   const raw = state.orderDateTime || `${dateKey()}T${timeKey()}`;
   const [d, tRaw] = raw.split('T'); const t = (tRaw || '00:00').slice(0, 5);
   const now = new Date(), backdated = (now - new Date(`${d}T${t}:00`)) > 10 * 60 * 1000;
