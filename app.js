@@ -691,7 +691,8 @@ function stockNow(s) {
     if (!isCount(it)) { out[k] = { ...meta, level: base || null }; return; }
     const moved = (type, all) => mv.filter(m => m.item === k && m.type === type && (all || since(m))).reduce((a, m) => a + (Number(m.qty) || 0), 0);
     const used = all => {
-      if (!USE_KEYS.includes(k)) return 0;
+      // a stock item keyed by a menu item ID (e.g. X-COKE) goes down by 1 for each one sold
+      if (!USE_KEYS.includes(k)) return os.filter(o => all || since(o)).reduce((a, o) => a + o.items.filter(l => l.id === k).reduce((b, l) => b + l.qty, 0), 0);
       let u = 0;
       os.filter(o => all || since(o)).forEach(o => o.items.forEach(l => {
         const x = l.usage ? l.usage[k] : 0;
@@ -722,9 +723,9 @@ const todoList = () => currentStock().filter(x => x.status === 'red' || x.status
 // menu items that need something the POS estimates is gone (e.g. karaage at 0) → warn on the ORDER screen
 function shortItems() {
   if (!openSession()) return {};
-  const gone = currentStock().filter(x => x.status === 'out' && USE_KEYS.includes(x.it.k));
+  const gone = currentStock().filter(x => x.status === 'out' && (USE_KEYS.includes(x.it.k) || itemById(x.it.k)));
   const out = {};
-  MENU.items.forEach(i => { const u = normUsage(i.usage); const g = gone.find(x => u[x.it.k] > 0); if (g) out[i.id] = g.it.name; });
+  MENU.items.forEach(i => { const u = normUsage(i.usage); const g = gone.find(x => u[x.it.k] > 0 || x.it.k === i.id); if (g) out[i.id] = g.it.name; });
   return out;
 }
 function todoCard(compact) {

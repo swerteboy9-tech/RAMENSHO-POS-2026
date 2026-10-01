@@ -61,6 +61,12 @@ const DEFAULT_STOCK_ITEMS = [
   { k: 'chiliOil', name: 'Chili oil', unit: '', type: 'level', prep: null, action: 'Prep', lead: '' },
   { k: 'greenOnion', name: 'Green onion', unit: '', type: 'level', prep: null, action: 'Buy', lead: '' },
   { k: 'lard', name: 'Lard', unit: '', type: 'level', prep: null, action: 'Prep', lead: '' },
+  // added 2026-10-01 (owner). Drinks use the menu item ID as key, so each can sold counts down. Prep points are provisional.
+  { k: 'rice', name: 'Rice (uncooked)', unit: 'kg', type: 'count', prep: 5, action: 'Buy', lead: '' },
+  { k: 'nori', name: 'Nori', unit: '', type: 'level', prep: null, action: 'Buy', lead: '' },
+  { k: 'X-COKE', name: 'Coca-Cola (can)', unit: 'cans', type: 'count', prep: 12, action: 'Buy', lead: '' },
+  { k: 'X-SPRITE', name: 'Sprite (can)', unit: 'cans', type: 'count', prep: 12, action: 'Buy', lead: '' },
+  { k: 'X-ROYAL', name: 'Royal (can)', unit: 'cans', type: 'count', prep: 12, action: 'Buy', lead: '' },
 ];
 /* Kitchen SOP shown on the RECIPE screen (same source). "TBC" = not measured yet. */
 const RECIPES = [
