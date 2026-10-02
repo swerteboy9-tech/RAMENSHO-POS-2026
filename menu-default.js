@@ -17,12 +17,12 @@ const DEFAULT_MENU = [
   { type: 'ITEM', id: 'R-TON', name: 'Tonkotsu Ramen', category: 'Ramen', price: 199, bowls: 1, icon: '🍜', active: true, usage: U(1, 0, 0.5, 0, 1, 0, 15), fee: 15 },
   { type: 'ITEM', id: 'R-TAN', name: 'Tantanmen', category: 'Ramen', price: 210, bowls: 1, icon: '🌶️', active: true, usage: U(0, 1, 0.5, 0, 0, 1, 15), fee: 15 },
   { type: 'ITEM', id: 'R-CHM', name: 'Chashu-men', category: 'Ramen', price: 299, bowls: 1, icon: '🥩', active: true, usage: U(1, 0, 0, 0, 1, 0, 15), fee: 15 },
-  { type: 'ITEM', id: 'B-TT', name: 'B1T1 Tonkotsu × Tonkotsu', category: 'B1T1', price: 280, bowls: 2, icon: '🍜', active: true, usage: U(2, 0, 1, 0, 2, 0, 30), dineInOnly: true },
-  { type: 'ITEM', id: 'B-TD', name: 'B1T1 Tonkotsu × Tantan', category: 'B1T1', price: 285, bowls: 2, icon: '🍜', active: true, usage: U(1, 1, 1, 0, 1, 1, 30), dineInOnly: true },
-  { type: 'ITEM', id: 'B-DD', name: 'B1T1 Tantan × Tantan', category: 'B1T1', price: 290, bowls: 2, icon: '🌶️', active: true, usage: U(0, 2, 1, 0, 0, 2, 30), dineInOnly: true },
-  { type: 'ITEM', id: 'B-TC', name: 'B1T1 Tonkotsu × Chashu-men', category: 'B1T1', price: 335, bowls: 2, icon: '🥩', active: true, usage: U(2, 0, 0.5, 0, 2, 0, 30), dineInOnly: true },
-  { type: 'ITEM', id: 'B-DC', name: 'B1T1 Tantan × Chashu-men', category: 'B1T1', price: 340, bowls: 2, icon: '🥩', active: true, usage: U(1, 1, 0.5, 0, 1, 1, 30), dineInOnly: true },
-  { type: 'ITEM', id: 'B-CC', name: 'B1T1 Chashu-men × Chashu-men', category: 'B1T1', price: 390, bowls: 2, icon: '🥩', active: true, usage: U(2, 0, 0, 0, 2, 0, 30), dineInOnly: true },
+  { type: 'ITEM', id: 'B-TT', name: 'B1T1 Tonkotsu × Tonkotsu', category: 'B1T1', price: 280, bowls: 2, icon: '🍜', active: true, usage: U(2, 0, 1, 0, 2, 0, 30), fee: 15, dineInOnly: false },
+  { type: 'ITEM', id: 'B-TD', name: 'B1T1 Tonkotsu × Tantan', category: 'B1T1', price: 285, bowls: 2, icon: '🍜', active: true, usage: U(1, 1, 1, 0, 1, 1, 30), fee: 15, dineInOnly: false },
+  { type: 'ITEM', id: 'B-DD', name: 'B1T1 Tantan × Tantan', category: 'B1T1', price: 290, bowls: 2, icon: '🌶️', active: true, usage: U(0, 2, 1, 0, 0, 2, 30), fee: 15, dineInOnly: false },
+  { type: 'ITEM', id: 'B-TC', name: 'B1T1 Tonkotsu × Chashu-men', category: 'B1T1', price: 335, bowls: 2, icon: '🥩', active: true, usage: U(2, 0, 0.5, 0, 2, 0, 30), fee: 15, dineInOnly: false },
+  { type: 'ITEM', id: 'B-DC', name: 'B1T1 Tantan × Chashu-men', category: 'B1T1', price: 340, bowls: 2, icon: '🥩', active: true, usage: U(1, 1, 0.5, 0, 1, 1, 30), fee: 15, dineInOnly: false },
+  { type: 'ITEM', id: 'B-CC', name: 'B1T1 Chashu-men × Chashu-men', category: 'B1T1', price: 390, bowls: 2, icon: '🥩', active: true, usage: U(2, 0, 0, 0, 2, 0, 30), fee: 15, dineInOnly: false },
   { type: 'ITEM', id: 'D-CHD', name: 'Chashu Don', category: 'Don', price: 160, bowls: 0, icon: '🍚', active: true, usage: U(0, 0, 0.5, 0, 0, 0), fee: 15 },
   { type: 'ITEM', id: 'D-KAD', name: 'Karaage Don', category: 'Don', price: 180, bowls: 0, icon: '🍗', active: true, usage: U(0, 0, 0, 4, 0, 0), fee: 15 },
   { type: 'ITEM', id: 'S-RICE', name: 'Rice (1 bowl)', category: 'Don', price: 40, bowls: 0, icon: '🍙', active: true, usage: U(0, 0, 0, 0, 0, 0), fee: 15 },
@@ -67,6 +67,9 @@ const DEFAULT_STOCK_ITEMS = [
   { k: 'X-COKE', name: 'Coca-Cola (can)', unit: 'cans', type: 'count', prep: 12, action: 'Buy', lead: '' },
   { k: 'X-SPRITE', name: 'Sprite (can)', unit: 'cans', type: 'count', prep: 12, action: 'Buy', lead: '' },
   { k: 'X-ROYAL', name: 'Royal (can)', unit: 'cans', type: 'count', prep: 12, action: 'Buy', lead: '' },
+  { k: 'water', name: 'Water dispenser (spare bottles)', unit: 'bottles', type: 'count', prep: 1, action: 'Buy', lead: '' },
+  { k: 'lpgUse', name: 'LPG (tank in use)', unit: '', type: 'level', prep: null, action: 'Buy', lead: 'same day' },
+  { k: 'lpgSpare', name: 'LPG (full spare tanks)', unit: 'tanks', type: 'count', prep: 0, action: 'Buy', lead: 'same day' },
 ];
 /* Kitchen SOP shown on the RECIPE screen (same source). "TBC" = not measured yet. */
 const RECIPES = [

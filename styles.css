@@ -153,6 +153,7 @@ select.input { appearance: auto; }
 .chips-row { display: flex; gap: 6px; flex-wrap: wrap; }
 .chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 .cart-line.fee { color: var(--muted); }
+.cart-line.fee .stepper, .cart-line.fee .cart-side { color: var(--ink); }
 
 /* tabs */
 .tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 2px; }

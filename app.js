@@ -135,16 +135,26 @@ function lineExtras(l) {
 }
 function cartTotal() { return state.cart.reduce((a, l) => a + lineTotal(l), 0); }
 // Take-out container fee (flyer: ₱15 noodles / rice dishes, ₱10 sides), one per unit, added automatically.
+// Take-out containers, counted automatically: one per bowl (B1T1 = 2), one per don / rice / side.
+// Staff can change the count at checkout (e.g. one of the bowls is eaten in the shop); the change is
+// kept while the cart gives the same automatic count, and dropped when items change.
+function feeAuto() {
+  const by = {};
+  state.cart.forEach(l => { if (!isFee(l) && l.fee > 0) by[l.fee] = (by[l.fee] || 0) + l.qty * Math.max(1, Number(l.bowls) || 0); });
+  return by;
+}
 function feeLines() {
   if (state.mode !== 'TAKEOUT') return [];
-  const byFee = {};
-  state.cart.forEach(l => { if (!isFee(l) && l.fee > 0) byFee[l.fee] = (byFee[l.fee] || 0) + l.qty; });
-  return Object.entries(byFee).map(([fee, qty]) => ({
-    id: 'FEE-' + fee, name: 'Take-out container ₱' + fee, category: 'Fee', bowls: 0, price: Number(fee), qty,
-    set: null, toppings: [], note: '', usage: normUsage(Object.fromEntries(USE_KEYS.map(k => [k, 0]))), fee: 0,
-  }));
+  const auto = feeAuto(), adj = state.feeAdj || {};
+  return [...new Set([...Object.keys(auto), ...Object.keys(adj).filter(f => adj[f].base === (auto[f] || 0))])].map(fee => {
+    const a = auto[fee] || 0, x = adj[fee], qty = x && x.base === a ? x.qty : a;
+    return {
+      id: 'FEE-' + fee, name: 'Take-out container ₱' + fee, category: 'Fee', bowls: 0, price: Number(fee), qty, auto: a,
+      set: null, toppings: [], note: '', usage: normUsage(Object.fromEntries(USE_KEYS.map(k => [k, 0]))), fee: 0,
+    };
+  });
 }
-function orderLines() { return [...state.cart.filter(l => !isFee(l)), ...feeLines()]; }
+function orderLines() { return [...state.cart.filter(l => !isFee(l)), ...feeLines().filter(l => l.qty > 0).map(({ auto, ...l }) => l)]; }
 function orderTotal() { return orderLines().reduce((a, l) => a + lineTotal(l), 0); }
 const dineInOnlyInCart = () => state.cart.filter(l => l.dineInOnly);
 function guestsDefault() { return Math.max(1, state.cart.reduce((a, l) => a + (Number(l.bowls) || 0) * l.qty, 0)); }
@@ -395,8 +405,11 @@ function checkoutView() {
         <span class="stepper"><button data-cart-minus="${i}">−</button><b>${l.qty}</b><button data-cart-plus="${i}">＋</button></span></div>
       <div class="cart-side"><b>${peso(lineTotal(l))}</b><button class="link-danger" data-cart-remove="${i}">Remove</button></div>
     </div>`).join('') || '<div class="muted">No items.</div>'}
-    ${fees.map(l => `<div class="cart-line fee"><div class="cart-main"><b>🥡 ${esc(l.name)} × ${l.qty}</b><small>added for take-out</small></div><div class="cart-side"><b>${peso(lineTotal(l))}</b></div></div>`).join('')}</div>
-  ${blocked ? `<div class="notice alert">B1T1 is dine-in only — both bowls must be eaten in the shop. If even one bowl is taken out, remove B1T1 and make two orders at normal price: DINE-IN for the bowl eaten here, TAKE-OUT for the bowl taken home.</div>` : ''}
+    ${fees.map(l => `<div class="cart-line fee"><div class="cart-main"><b>🥡 ${esc(l.name)}</b>
+        <small>${l.qty === l.auto ? 'auto: 1 per bowl (B1T1 = 2), don, rice, side' : `changed — auto was ${l.auto}`}</small>
+        <span class="stepper"><button data-fee-adj="${l.price}|-1">−</button><b>${l.qty}</b><button data-fee-adj="${l.price}|1">＋</button></span></div>
+      <div class="cart-side"><b>${peso(lineTotal(l))}</b></div></div>`).join('')}</div>
+  ${blocked ? `<div class="notice alert">${esc(dineInOnlyInCart().map(l => l.name).join(', '))} is dine-in only. Remove it or switch to DINE-IN.</div>` : ''}
   ${setOffers().map((o, i) => `<div class="notice set-offer"><span>🍜＋${o.don.icon || '🍚'} <b>${esc(o.ramen.name)} + ${esc(o.don.name)}</b> can be a set — save ${peso(o.saving)}</span>
     <button class="btn small primary" data-make-set="${i}">Make set</button></div>`).join('')}
   <button class="btn wide" data-add-more>＋ Add items</button>
@@ -457,12 +470,12 @@ function keepCheckoutInputs() {
   const d = $('#orderDateTime'); if (d) state.orderDateTime = d.value;
 }
 function resetOrder() {
-  Object.assign(state, { cart: [], checkout: false, detail: null, editingOrderId: null, orderDateTime: null, ref: '', cashGiven: '', payment: 'CASH', mode: 'DINEIN', guests: null });
+  Object.assign(state, { cart: [], checkout: false, detail: null, editingOrderId: null, orderDateTime: null, ref: '', cashGiven: '', payment: 'CASH', mode: 'DINEIN', guests: null, feeAdj: {} });
 }
 function completeOrder() {
   keepCheckoutInputs();
   if (!state.cart.length) return alert('Please add an item.');
-  if (state.mode === 'TAKEOUT' && dineInOnlyInCart().length) return alert('B1T1 is dine-in only — both bowls must be eaten in the shop.\nIf even one bowl is taken out, remove B1T1 and make two orders at normal price: DINE-IN for the bowl eaten here, TAKE-OUT for the bowl taken home.');
+  if (state.mode === 'TAKEOUT' && dineInOnlyInCart().length) return alert(dineInOnlyInCart().map(l => l.name).join(', ') + ' is dine-in only. Remove it or switch to DINE-IN.');
   const raw = state.orderDateTime || `${dateKey()}T${timeKey()}`;
   const [d, tRaw] = raw.split('T'); const t = (tRaw || '00:00').slice(0, 5);
   const now = new Date(), backdated = (now - new Date(`${d}T${t}:00`)) > 10 * 60 * 1000;
@@ -493,8 +506,11 @@ function beginEditOrder(id) {
   if (state.cart.length && !state.editingOrderId && !confirm('Discard the current unfinished order and edit this one?')) return;
   Object.assign(state, {
     editingOrderId: o.id, cart: clone(o.items.filter(l => !isFee(l))), guests: o.guests || null, payment: o.payment, mode: o.mode || 'DINEIN', ref: o.ref || '',
-    orderDateTime: `${o.date}T${o.time}`, cashGiven: '', detail: null, checkout: true, view: 'order',
+    orderDateTime: `${o.date}T${o.time}`, cashGiven: '', detail: null, checkout: true, view: 'order', feeAdj: {},
   });
+  // keep the container count that was saved with the order
+  const auto = feeAuto();
+  o.items.filter(isFee).forEach(l => { state.feeAdj[l.price] = { base: auto[l.price] || 0, qty: l.qty }; });
   render();
 }
 function deleteOrder(id) {
@@ -1483,6 +1499,13 @@ function bind() {
   on('[data-cart-minus]', b => { keepCheckoutInputs(); const l = state.cart[+b.dataset.cartMinus]; l.qty = Math.max(1, l.qty - 1); render(); });
   on('[data-cart-remove]', b => { keepCheckoutInputs(); state.cart.splice(+b.dataset.cartRemove, 1); render(); });
   on('[data-mode]', b => { keepCheckoutInputs(); state.mode = b.dataset.mode; render(); });
+  on('[data-fee-adj]', b => {
+    keepCheckoutInputs();
+    const [fee, d] = b.dataset.feeAdj.split('|'), line = feeLines().find(l => String(l.price) === fee);
+    if (!line) return;
+    state.feeAdj = { ...(state.feeAdj || {}), [fee]: { base: line.auto, qty: Math.max(0, line.qty + Number(d)) } };
+    render();
+  });
   on('[data-guests]', b => { keepCheckoutInputs(); state.guests = Math.max(1, (state.guests ?? guestsDefault()) + Number(b.dataset.guests)); render(); });
   on('[data-pay]', b => { keepCheckoutInputs(); state.payment = b.dataset.pay; render(); });
   on('[data-cash]', b => { keepCheckoutInputs(); state.cashGiven = b.dataset.cash; render(); });
