@@ -1319,6 +1319,28 @@ function doClockOut() {
 const monthTarget = () => Number(localStorage.getItem(K.target) || 0);
 function shiftMonth(mk, d) { const [y, m] = mk.split('-').map(Number); return monthKey(new Date(y, m - 1 + d, 1)); }
 function monthLabel(mk) { const [y, m] = mk.split('-'); return new Date(+y, +m - 1, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' }); }
+// REPORT: sales per register session (lunch / night), newest day first (owner 2026-10-02)
+function shiftSalesCard(mk, os) {
+  const ss = sessions().filter(x => x.openedAt.startsWith(mk)).sort((a, b) => a.openedAt.localeCompare(b.openedAt));
+  const inS = (o, x) => { const t = recStamp(o); return t >= x.openedAt && (!x.closedAt || t <= x.closedAt); };
+  const rows = ss.map(x => ({ x, os: os.filter(o => inS(o, x)) }));
+  const outside = os.filter(o => !ss.some(x => inS(o, x)));
+  const sum = list => list.reduce((a, o) => { a.sales += o.total; a.n++; a.cash += o.payment === 'CASH' ? o.total : 0; a.gcash += o.payment === 'GCASH' ? o.total : 0;
+    a.bowls += o.items.reduce((b, l) => b + (Number(l.bowls) || 0) * l.qty, 0); a.guests += Number(o.guests) || 0; return a; }, { sales: 0, n: 0, cash: 0, gcash: 0, bowls: 0, guests: 0 });
+  const days = [...new Set([...rows.map(r => r.x.openedAt.slice(0, 10)), ...outside.map(o => o.date)])].sort().reverse();
+  if (!days.length) return '';
+  const line = (label, sub, t) => `<div class="row"><span>${label}<small class="muted">${sub}</small></span><b>${peso(t.sales)}</b></div>
+    <div class="row sub"><span>${t.n} orders · ${t.bowls} bowls · ${t.guests} guests</span><span>cash ${peso(t.cash)} · GCash ${peso(t.gcash)}</span></div>`;
+  return `<div class="card"><div class="section-title">Sales by shift</div>
+    ${days.map(d => {
+      const dayRows = rows.filter(r => r.x.openedAt.startsWith(d)), out = outside.filter(o => o.date === d);
+      const total = sum([...dayRows.flatMap(r => r.os), ...out]);
+      return `<div class="row total-row"><span>${d.slice(5)} ${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(d + 'T12:00:00').getDay()]}</span><b>${peso(total.sales)}</b></div>
+        ${dayRows.map(r => line(`${esc((r.x.shift || 'Shift').split(' ')[0])} `, ` ${hhmm(r.x.openedAt)}–${r.x.closedAt ? hhmm(r.x.closedAt) : 'open'} · ${esc(r.x.openedBy || '')}`, sum(r.os))).join('')}
+        ${out.length ? line('⚠ Register closed ', ' orders taken without an open register', sum(out)) : ''}`;
+    }).join('<hr>')}
+  </div>`;
+}
 function reportView() {
   const mk = state.reportMonth || monthKey();
   const os = orders().filter(o => o.date.startsWith(mk)), es = expenses().filter(e => e.date.startsWith(mk) && isSpend(e));
@@ -1359,6 +1381,7 @@ function reportView() {
       <div class="card kpi"><small>Expenses</small><b>${peso(exp)}</b><small>recorded in POS</small></div>
       <div class="card kpi"><small>Net</small><b>${peso(s.sales - exp)}</b><small>sales − expenses</small></div>
     </div>
+    ${shiftSalesCard(mk, os)}
     <div class="card"><div class="section-title">Daily sales</div>
       <div class="daybars">${dayVals.map((v, i) => `<div title="${i + 1}: ${peso(v)}"><span style="height:${v / maxDay * 100}%"></span><small>${(i + 1) % 5 === 1 ? i + 1 : ''}</small></div>`).join('')}</div></div>
     <div class="card"><div class="section-title">Mix</div>
