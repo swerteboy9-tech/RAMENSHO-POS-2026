@@ -102,6 +102,8 @@ const SheetSync = (() => {
         if (q.type === 'expense_delete') { p.remove.add(q.expenseId); p.upsert.delete(q.expenseId); }
         if (q.type === 'move_add') { p.upsert.add(q.move.id); p.remove.delete(q.move.id); }
         if (q.type === 'move_delete') { p.remove.add(q.moveId); p.upsert.delete(q.moveId); }
+        if (q.type === 'home_add') { p.upsert.add(q.home.id); p.remove.delete(q.home.id); }
+        if (q.type === 'home_delete') { p.remove.add(q.homeId); p.upsert.delete(q.homeId); }
         if (q.type === 'register') p.sessions.set(q.session.id, q.session);
         if (q.type === 'clock_in' || q.type === 'clock_out') p.clock.set(q.clock.id, q.clock);
         if (q.type === 'served') p.served.set(q.orderId, true);
@@ -124,6 +126,8 @@ const SheetSync = (() => {
     stockCount: c => post({ type: 'stock_count', count: c }),
     moveAdd: m => post({ type: 'move_add', move: m }),
     moveDelete: id => post({ type: 'move_delete', moveId: id }),
+    homeAdd: h => post({ type: 'home_add', home: h }),
+    homeDelete: id => post({ type: 'home_delete', homeId: id }),
     register: s => post({ type: 'register', session: s }),
     clockIn: c => post({ type: 'clock_in', clock: c }),
     clockOut: c => post({ type: 'clock_out', clock: c }),

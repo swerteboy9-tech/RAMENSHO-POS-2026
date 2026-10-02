@@ -47,12 +47,12 @@ const DEFAULT_MENU = [
 // The owner's stock check list (2026-10-01). Same as the "Stock Items" sheet, which overrides this.
 // prep = prep / order at or below this number (busiest day of 2026-09-22〜29 × lead time).
 const DEFAULT_STOCK_ITEMS = [
-  { k: 'noodleW', name: 'White noodles', unit: 'portions', type: 'count', prep: 68, action: 'Order', lead: '2 days (KANDS)' },
-  { k: 'noodleY', name: 'Yellow noodles', unit: 'portions', type: 'count', prep: 36, action: 'Order', lead: '2 days (KANDS)' },
+  { k: 'noodleW', name: 'White noodles', unit: 'portions', type: 'count', prep: 68, action: 'Order', lead: '2 days (KANDS)', shopMin: 10 },
+  { k: 'noodleY', name: 'Yellow noodles', unit: 'portions', type: 'count', prep: 36, action: 'Order', lead: '2 days (KANDS)', shopMin: 5 },
   { k: 'ajitama', name: 'Ajitama', unit: 'pcs', type: 'count', prep: 22, action: 'Prep', lead: '1 day' },
   { k: 'karaage', name: 'Karaage (marinated)', unit: 'pcs', type: 'count', prep: 44, action: 'Prep', lead: '1 day' },
-  { k: 'baseTon', name: 'Tonkotsu soup base', unit: 'bags', type: 'count', prep: 2, action: 'Order', lead: '2 days (KANDS)' },
-  { k: 'baseTan', name: 'Tantan soup base', unit: 'bags', type: 'count', prep: 1, action: 'Order', lead: '2 days (KANDS)' },
+  { k: 'baseTon', name: 'Tonkotsu soup base', unit: 'bags', type: 'count', prep: 2, action: 'Order', lead: '2 days (KANDS)', shopMin: 0.5 },
+  { k: 'baseTan', name: 'Tantan soup base', unit: 'bags', type: 'count', prep: 1, action: 'Order', lead: '2 days (KANDS)', shopMin: 0.5 },
   { k: 'kaeshi', name: 'Kaeshi (500ml bottle)', unit: 'bottles', type: 'count', prep: 2, action: 'Prep', lead: '1 day' },
   { k: 'mayo', name: 'Mayonnaise', unit: 'bottles', type: 'count', prep: 1, action: 'Buy', lead: '' },
   { k: 'sweet', name: 'Sweet sauce', unit: 'bottles', type: 'count', prep: 1, action: 'Prep', lead: '' },

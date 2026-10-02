@@ -6,7 +6,7 @@
 const K = {
   orders: 'sho_orders', expenses: 'sho_expenses', register: 'sho_register', clockedIn: 'sho_clocked_in', audit: 'sho_audit',
   staff: 'sho_staff', curStaff: 'sho_current_staff', served: 'sho_served', target: 'sho_month_target',
-  moves: 'sho_moves', meal: 'sho_meal_allowance',
+  moves: 'sho_moves', meal: 'sho_meal_allowance', home: 'sho_home',
 };
 const load = (k, def = []) => { try { return JSON.parse(localStorage.getItem(k) || 'null') ?? def; } catch (e) { return def; } };
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -234,7 +234,7 @@ function updateSyncBadge() {
 }
 function go(view) {
   state.view = view; state.detail = null; state.checkout = false; state.expPreset = null; state.expManual = false;
-  state.editingExpenseId = null; state.stockEdit = null; state.recipeId = null; state.historyDate = null; state.regClosing = false; state.moneyForm = false; state.moveForm = null; state.laborPay = null; state.stockCheck = false; state.soldOutMode = false;
+  state.editingExpenseId = null; state.stockEdit = null; state.recipeId = null; state.historyDate = null; state.regClosing = false; state.moneyForm = false; state.moveForm = null; state.laborPay = null; state.stockCheck = false; state.soldOutMode = false; state.homeForm = null;
   render(); window.scrollTo(0, 0);
 }
 
@@ -678,15 +678,39 @@ const isLow = i => Number(i.reorder) > 0 && Number(i.stock) <= Number(i.reorder)
 const isCount = it => it.type !== 'level';
 const nfmt = (v, unit) => (v === null || v === undefined ? '—' : unit === 'bags' ? String(+(+v).toFixed(1)) : String(+(+v).toFixed(1)));
 const DOT = { out: '⛔', red: '🔴', yellow: '🟡', green: '🟢', unknown: '⚪' };
+/* Home storage (owner 2026-10-02): noodles and soup bases are kept at the owner's home and brought to the shop.
+   Items with "Bring from home at (shop)" (shopMin) are red when the shop is low (bring some) or when shop + home
+   reaches the prep point (order from KANDS). Home balance = last home Count + later KANDS / To shop / Adjust. */
+const homeMoves = () => load(K.home);
+const HOME_TYPES = [['To shop', '📦 Bring to shop', -1], ['KANDS', '🚚 Delivered to home (KANDS)', 1], ['Count', '🔢 Count at home', 0], ['Adjust', '± Adjust home', 1]];
+const hasHome = it => isCount(it) && it.shopMin !== null && it.shopMin !== undefined && it.shopMin !== '';
+function homeBal(k) {
+  let bal = 0;
+  homeMoves().filter(m => m.item === k).sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+    .forEach(m => { bal = m.type === 'Count' ? Number(m.qty) || 0 : bal + (Number(m.qty) || 0); });
+  return +bal.toFixed(2);
+}
 function statusOf(it, v) {
   if (!isCount(it)) return v === 'Out' ? 'out' : v === 'Low' ? 'red' : v === 'Enough' ? 'green' : 'unknown';
   if (v === null || v === undefined) return 'unknown';
+  if (hasHome(it)) {
+    const total = (Number(v) || 0) + homeBal(it.k), orderAt = it.prep === null || it.prep === undefined || it.prep === '' ? null : Number(it.prep);
+    if (v <= 0 && total <= 0) return 'out';
+    if (v <= Number(it.shopMin) || (orderAt !== null && total <= orderAt)) return 'red';
+    return orderAt !== null && total <= orderAt * 1.3 ? 'yellow' : 'green';
+  }
   if (v <= 0) return 'out';
   if (it.prep === null || it.prep === undefined || it.prep === '') return 'green';
   if (v <= it.prep) return 'red';
   return v <= it.prep * 1.3 ? 'yellow' : 'green';
 }
 function todoText(it, v) {
+  if (hasHome(it)) {
+    const h = homeBal(it.k), shop = Number(v) || 0, total = shop + h, parts = [];
+    if (shop <= Number(it.shopMin)) parts.push(h > 0 ? `Bring ${it.name} from home — ${nfmt(shop, it.unit)} in shop, ${nfmt(h, it.unit)} at home` : `${it.name}: ${nfmt(shop, it.unit)} in shop, none at home`);
+    if (it.prep !== null && it.prep !== undefined && it.prep !== '' && total <= Number(it.prep)) parts.push(`Order ${it.name} from KANDS — ${nfmt(total, it.unit)} ${it.unit} in total (order at ${it.prep})${it.lead ? ' · takes ' + it.lead : ''}`);
+    return parts.join(' / ') || `${it.name} — ${nfmt(shop, it.unit)} in shop, ${nfmt(h, it.unit)} at home`;
+  }
   const left = isCount(it) ? `${nfmt(v, it.unit)} ${it.unit} left` : (v || '?');
   return `${it.action} ${it.name} — ${left}${isCount(it) && it.prep != null ? ` (prep point ${it.prep})` : ''}${it.lead ? ` · takes ${it.lead}` : ''}`;
 }
@@ -838,6 +862,58 @@ function saveStockCheck() {
   alert(todo.length ? `Check saved.\n\nTo prep / buy today:\n${todo.map(x => '• ' + todoText(x.it, x.v)).join('\n')}` : 'Check saved. Stock OK ✓');
   render();
 }
+// Home storage card on STOCK + its form
+function homeCard() {
+  const items = STOCK_ITEMS.filter(hasHome); if (!items.length) return '';
+  const cur = currentStock();
+  return `<div class="card"><div class="section-title">🏠 Home storage <small class="muted">owner's home</small></div>
+    <table class="stock-table"><thead><tr><th></th><th>Home</th><th>Shop</th><th>Total</th></tr></thead><tbody>
+    ${items.map(it => { const x = cur.find(c => c.it.k === it.k) || {}, h = homeBal(it.k), shop = x.v;
+      return `<tr><td>${esc(it.name)}<small>${esc(it.unit)} · bring at ${it.shopMin} · order at ${it.prep ?? '—'}</small></td><td><b>${nfmt(h, it.unit)}</b></td><td>${shop === null || shop === undefined ? '—' : nfmt(shop, it.unit)}</td><td>${shop === null || shop === undefined ? '—' : nfmt((Number(shop) || 0) + h, it.unit)}</td></tr>`; }).join('')}
+    </tbody></table>
+    <div class="move-btns">${HOME_TYPES.map(([t, label]) => `<button class="btn small" data-home-form="${t}">${label}</button>`).join('')}</div>
+    ${homeListHTML()}
+  </div>`;
+}
+function homeListHTML() {
+  const nameOf = k => (STOCK_ITEMS.find(x => x.k === k) || {}).name || k;
+  const list = homeMoves().slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 10);
+  if (!list.length) return '<p class="help">No home records yet. Start with “🔢 Count at home”.</p>';
+  return `<div class="muted small-title">Recent home records</div>${list.map(m => `<div class="row sub"><span>${esc(m.createdAt.slice(5, 16))} ${esc(m.type)} · ${esc(nameOf(m.item))} ${m.qty}${m.note ? ' · ' + esc(m.note) : ''} · ${esc(m.staff || '')}</span><button class="link-danger" data-home-del="${m.id}">Delete</button></div>`).join('')}`;
+}
+function homeFormView() {
+  const type = state.homeForm, label = (HOME_TYPES.find(t => t[0] === type) || [])[1], items = STOCK_ITEMS.filter(hasHome);
+  return `<button class="btn back" data-home-back>← Back</button>
+  <div class="card"><div class="section-title">${label}</div>
+    <div class="field"><label>Item</label><div class="pay-from">${items.map((it, i) => `<button class="choice ${i === 0 ? 'active' : ''}" data-home-item="${it.k}">${esc(it.name)} <small>${esc(it.unit)} · home ${nfmt(homeBal(it.k), it.unit)}</small></button>`).join('')}</div>
+      <input type="hidden" id="homeItem" value="${items[0] ? items[0].k : ''}"></div>
+    <div class="field"><label>${type === 'Count' ? 'Count at home now' : type === 'Adjust' ? 'Change (+ / −)' : 'Quantity'}</label><input class="input big-input" id="homeQty" inputmode="decimal"></div>
+    <div class="field"><label>Note</label><input class="input" id="homeNote" maxlength="60" placeholder="${type === 'To shop' ? 'e.g. Hakata noodles' : 'optional'}"></div>
+    <button class="btn primary wide" data-home-save>SAVE</button>
+    ${type === 'To shop' ? '<p class="help">Also adds them to the shop stock (as Received) when the register is open.</p>' : ''}
+    ${type === 'KANDS' ? '<p class="help">Record the payment in EXPENSE separately.</p>' : ''}
+  </div>`;
+}
+function saveHome() {
+  const type = state.homeForm, raw = Number($('#homeQty').value), item = $('#homeItem').value;
+  if (!item) return;
+  if (isNaN(raw) || (type !== 'Adjust' && !(raw >= 0)) || (type !== 'Count' && raw === 0)) return alert('Enter the quantity.');
+  const now = new Date(), staff = currentStaff() || 'Owner', note = $('#homeNote').value.trim();
+  const qty = type === 'To shop' ? -Math.abs(raw) : type === 'KANDS' ? Math.abs(raw) : raw;
+  const h = { id: uid(), date: dateKey(now), createdAt: stampOf(now), staff, item, type, qty, note };
+  save(K.home, [...homeMoves(), h]); SheetSync.homeAdd(h); addAudit({ action: 'home_move', after: h });
+  if (type === 'To shop') {
+    if (openSession()) {
+      const m = { id: uid(), date: dateKey(now), createdAt: stampOf(now), staff, item, type: 'Received', qty: Math.abs(raw), note: 'from home' + (note ? ' · ' + note : '') };
+      save(K.moves, [...moves(), m]); SheetSync.moveAdd(m);
+    } else alert('Saved at home. The register is closed, so count these in the shop stock when you open the register.');
+  }
+  state.homeForm = null; toast(`Home: ${type} ${Math.abs(raw)} recorded`); render();
+}
+function deleteHome(id) {
+  const h = homeMoves().find(x => x.id === id); if (!h || !confirm(`Delete this home record?\n${h.type} ${h.item} ${h.qty}`)) return;
+  save(K.home, homeMoves().filter(x => x.id !== id)); SheetSync.homeDelete(id); addAudit({ action: 'home_move_delete', before: h }); render();
+}
 function moveFormView() {
   const type = state.moveForm, label = (MOVE_TYPES.find(t => t[0] === type) || [])[1];
   const items = STOCK_ITEMS.filter(isCount);
@@ -867,16 +943,17 @@ function deleteMove(id) {
 }
 function stockView() {
   if (state.stockCheck) return stockCheckView();
+  if (state.homeForm) return homeFormView();
   if (state.moveForm) return moveFormView();
   if (state.stockEdit) return stockCountView();
   const supplies = !INVENTORY.rows.length ? `<div class="card"><div class="section-title">📦 Other supplies</div>
     <div class="muted">None yet. Add rows to the “Inventory” sheet (LPG, containers…), then tap 🔄.</div></div>
     <div class="meta"><small class="muted">Supplies: ${stampLabel(INVENTORY.fetchedAt)}</small><button class="btn small" data-stock-refresh>🔄 Refresh</button></div>` : null;
-  if (supplies) return `<div class="section-title">Stock</div>${shiftStockCard()}${supplies}`;
+  if (supplies) return `<div class="section-title">Stock</div>${shiftStockCard()}${homeCard()}${supplies}`;
   const low = INVENTORY.rows.filter(isLow);
   const cats = [...new Set(INVENTORY.rows.map(i => i.category).filter(Boolean))];
   let list = state.stockOnlyLow ? low : INVENTORY.rows.filter(i => !state.stockCat || i.category === state.stockCat);
-  return `<div class="section-title">Stock</div>${shiftStockCard()}
+  return `<div class="section-title">Stock</div>${shiftStockCard()}${homeCard()}
     <div class="section-title">📦 Other supplies</div>
     ${low.length ? `<div class="notice alert">🔴 Need to buy: ${low.length} item(s)</div>` : ''}
     <div class="tabs">
@@ -1439,6 +1516,7 @@ async function runSync() {
   const kml = (j.settings || {}).kaeshi_ml_per_bottle;
   if (kml) localStorage.setItem('sho_kaeshi_ml', String(kml));
   if (Array.isArray(j.stockItems) && j.stockItems.length) { save('sho_stock_items', j.stockItems); STOCK_ITEMS = j.stockItems; }
+  if (Array.isArray(j.home)) save(K.home, mirror(homeMoves(), j.home, '0000-00-00', pend));
   const meal = (j.settings || {}).meal_allowance;
   if (meal !== undefined && meal !== '') localStorage.setItem(K.meal, String(meal));
   const target = pend.settings.month_target ?? (j.settings || {}).month_target;
@@ -1563,6 +1641,11 @@ function bind() {
   on('[data-move-back]', () => { state.moveForm = null; render(); });
   on('[data-move-item]', b => { $$('[data-move-item]').forEach(x => x.classList.toggle('active', x === b)); $('#moveItem').value = b.dataset.moveItem; });
   on('[data-move-save]', saveMove);
+  on('[data-home-form]', b => { state.homeForm = b.dataset.homeForm; render(); window.scrollTo(0, 0); });
+  on('[data-home-back]', () => { state.homeForm = null; render(); });
+  on('[data-home-item]', b => { $('#homeItem').value = b.dataset.homeItem; document.querySelectorAll('[data-home-item]').forEach(x => x.classList.toggle('active', x === b)); });
+  on('[data-home-save]', saveHome);
+  on('[data-home-del]', b => deleteHome(b.dataset.homeDel));
   on('[data-move-del]', b => deleteMove(b.dataset.moveDel));
   bindShiftLive();
   on('[data-month]', b => { const next = shiftMonth(state.reportMonth || monthKey(), +b.dataset.month); if (next <= monthKey()) { state.reportMonth = next; render(); } });
