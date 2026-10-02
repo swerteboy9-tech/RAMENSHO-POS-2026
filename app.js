@@ -768,11 +768,13 @@ function shortItems() {
   MENU.items.forEach(i => { const u = normUsage(i.usage); const g = gone.find(x => u[x.it.k] > 0 || x.it.k === i.id); if (g) out[i.id] = g.it.name; });
   return out;
 }
-function todoCard(compact) {
+// HOME / KITCHEN: warning + number of items only (owner 2026-10-02). The full list is on STOCK (detail = true).
+function todoCard(compact, detail) {
   const list = todoList(), unknown = currentStock().filter(x => x.status === 'unknown');
   if (!list.length) return compact ? '' : `<div class="card todo ok"><b>✓ Stock OK</b><small>${unknown.length ? unknown.length + ' item(s) not counted yet' : 'Nothing to prep or buy right now'}</small></div>`;
-  return `<button class="card todo" data-go="stock"><b>🧾 To prep / buy today (${list.length})</b>
-    ${list.map(({ it, v, status }) => `<small>${DOT[status]} ${esc(todoText(it, v))}</small>`).join('')}</button>`;
+  if (!detail) return `<button class="card todo" data-go="stock"><b>⚠ ${list.length} item(s) to prep / buy</b><small>Tap to see the list on STOCK →</small></button>`;
+  return `<div class="card todo"><b>🧾 To prep / buy today (${list.length})</b>
+    ${list.map(({ it, v, status }) => `<small>${DOT[status]} ${esc(todoText(it, v))}</small>`).join('')}</div>`;
 }
 // 15:00 check before the dinner rush (the middle shift arrives at 15:00)
 function needsAfternoonCheck() {
@@ -949,11 +951,11 @@ function stockView() {
   const supplies = !INVENTORY.rows.length ? `<div class="card"><div class="section-title">📦 Other supplies</div>
     <div class="muted">None yet. Add rows to the “Inventory” sheet (LPG, containers…), then tap 🔄.</div></div>
     <div class="meta"><small class="muted">Supplies: ${stampLabel(INVENTORY.fetchedAt)}</small><button class="btn small" data-stock-refresh>🔄 Refresh</button></div>` : null;
-  if (supplies) return `<div class="section-title">Stock</div>${shiftStockCard()}${homeCard()}${supplies}`;
+  if (supplies) return `<div class="section-title">Stock</div>${todoCard(true, true)}${shiftStockCard()}${homeCard()}${supplies}`;
   const low = INVENTORY.rows.filter(isLow);
   const cats = [...new Set(INVENTORY.rows.map(i => i.category).filter(Boolean))];
   let list = state.stockOnlyLow ? low : INVENTORY.rows.filter(i => !state.stockCat || i.category === state.stockCat);
-  return `<div class="section-title">Stock</div>${shiftStockCard()}${homeCard()}
+  return `<div class="section-title">Stock</div>${todoCard(true, true)}${shiftStockCard()}${homeCard()}
     <div class="section-title">📦 Other supplies</div>
     ${low.length ? `<div class="notice alert">🔴 Need to buy: ${low.length} item(s)</div>` : ''}
     <div class="tabs">
