@@ -343,13 +343,8 @@ function detailLine() {
   const tops = MENU.toppings.filter(t => d.tops[t.id] > 0);
   const usage = normUsage(it.usage);
   if (set) addUsage(usage, set.usage);
-  // extra noodles follow the bowl: kaedama on a tantanmen (yellow noodles only) uses a yellow portion
-  const yellowBowl = normUsage(it.usage).noodleY > 0 && !(normUsage(it.usage).noodleW > 0);
-  tops.forEach(t => {
-    const u = normUsage(t.usage);
-    if (yellowBowl && u.noodleW > 0 && !u.noodleY) { u.noodleY = u.noodleW; u.noodleW = 0; }
-    addUsage(usage, u, d.tops[t.id]);
-  });
+  // Kaedama is chosen by noodle (owner 2026-10-02): "Tonkotsu (white)" or "Tantan (yellow)", each with its own usage.
+  tops.forEach(t => addUsage(usage, normUsage(t.usage), d.tops[t.id]));
   return {
     ...baseLine(it, d.qty),
     set: set ? { id: set.id, name: set.name, price: setUpgrade(it, set) } : null,

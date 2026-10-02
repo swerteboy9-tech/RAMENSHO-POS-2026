@@ -34,7 +34,8 @@ const DEFAULT_MENU = [
   { type: 'ITEM', id: 'X-ROYAL', name: 'Royal', category: 'Drink', price: 60, bowls: 0, icon: '🥤', active: true, usage: U(0, 0, 0, 0, 0, 0) },
 
   // kaedama switches to yellow noodles on a tantanmen (see detailLine in app.js)
-  { type: 'TOPPING', id: 'T-KAE', name: 'Kaedama (extra noodles)', price: 60, icon: '➕', active: true, usage: U(1, 0, 0, 0, 0, 0) },
+  { type: 'TOPPING', id: 'T-KAE', name: 'Kaedama – Tonkotsu (white)', price: 50, icon: '➕', active: true, usage: U(1, 0, 0, 0, 0, 0) },
+  { type: 'TOPPING', id: 'T-KAEY', name: 'Kaedama – Tantan (yellow)', price: 50, icon: '➕', active: true, usage: U(0, 1, 0, 0, 0, 0) },
   { type: 'TOPPING', id: 'T-EGG', name: 'Ajitama', price: 30, icon: '🥚', active: true, usage: U(0, 0, 1, 0, 0, 0) },
   { type: 'TOPPING', id: 'T-CH1', name: 'Chashu +1 slice', price: 30, icon: '🥓', active: true, usage: U(0, 0, 0, 0, 0, 0) },
   { type: 'TOPPING', id: 'T-CH2', name: 'Chashu +2 slices', price: 55, icon: '🥓', active: true, usage: U(0, 0, 0, 0, 0, 0) },
