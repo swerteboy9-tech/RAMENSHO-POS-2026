@@ -1115,6 +1115,13 @@ function closeRegisterForm(s) {
   return `<button class="btn back" data-reg-cancel>← Back</button>
   <div class="card">
     <div class="section-title">🔒 Close the register <small class="muted">opened ${hhmm(s.openedAt)} by ${esc(s.openedBy)}</small></div>
+    <div class="shift-sales">
+      <div class="label">THIS SHIFT SALES · ${f.orders} orders · ${f.bowls} bowls</div>
+      <div class="big">${peso(f.totalSales)}</div>
+      <div class="row"><span>💵 Cash sales</span><b>${peso(f.cashSales)}</b></div>
+      <div class="row"><span>📱 GCash sales</span><b>${peso(f.gcashSales)}</b></div>
+      ${f.cashOut ? `<div class="row sub"><span>Paid from the drawer (purchases, meal, advance…)</span><span>−${peso(f.cashOut)}</span></div>` : ''}
+    </div>
     <div class="row sub"><span>Opening ${peso(s.openingCash)} + cash sales ${peso(f.cashSales)}${f.cashIn ? ' + in ' + peso(f.cashIn) : ''} − paid from drawer ${peso(f.cashOut)}</span></div>
     <div class="row total-row"><span>Should be in the drawer</span><b id="expCash" data-v="${f.expectedCash}">${peso(f.expectedCash)}</b></div>
     <div class="field"><label>1. Count the cash in the drawer (₱)</label>
@@ -1224,7 +1231,7 @@ function saveClose() {
   });
   save(K.register, sessions().map(x => (x.id === s.id ? closed : x))); SheetSync.register(closed); addAudit({ action: 'register_close', after: closed });
   const off = STOCK_ITEMS.filter(it => isCount(it) && items[it.k].diff !== null && Math.abs(items[it.k].diff) >= 1).map(it => `${it.name} ${items[it.k].diff > 0 ? '+' : ''}${items[it.k].diff} ${it.unit}`);
-  alert(`Register closed.\nCash: ${Math.abs(closed.cashDiff) < 1 ? 'matches ✓' : signed(closed.cashDiff)}` +
+  alert(`Register closed.\nThis shift sales: ${peso(closed.totalSales)} (cash ${peso(closed.cashSales)} · GCash ${peso(closed.gcashSales)}, ${closed.orders} orders)\nCash: ${Math.abs(closed.cashDiff) < 1 ? 'matches ✓' : signed(closed.cashDiff)}` +
     (closed.gcashDiff != null ? `\nGCash: ${Math.abs(closed.gcashDiff) < 1 ? 'matches ✓' : signed(closed.gcashDiff)}` : '') +
     `\nStock count vs POS: ${off.length ? off.join(', ') : 'matches ✓'}` +
     `\n\nTo prep / buy:\n${todo.length ? todo.map(x => '• ' + x).join('\n') : 'nothing ✓'}` +

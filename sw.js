@@ -1,4 +1,4 @@
-const CACHE = 'ramen-sho-pos-v17';
+const CACHE = 'ramen-sho-pos-v18';
 const ASSETS = ['./', 'index.html', 'styles.css', 'config.js', 'menu-default.js', 'sheet-sync.js', 'app.js', 'manifest.webmanifest', 'icon.svg'];
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))); });
 self.addEventListener('activate', e => e.waitUntil(
