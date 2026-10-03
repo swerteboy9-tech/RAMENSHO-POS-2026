@@ -268,7 +268,7 @@ select.input { appearance: auto; }
 
 /* nav */
 .nav {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-template-columns: repeat(7, 1fr);
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   background: var(--ink); padding-bottom: env(safe-area-inset-bottom);
 }
 .nav button {
@@ -294,3 +294,11 @@ select.input { appearance: auto; }
   .kpis b { font-size: 15px; }
   .hero .big { font-size: 32px; }
 }
+
+/* owner mode (tap the 昇 logo 5 times): REPORT / HISTORY and sales figures are shown only to the owner */
+body:not(.owner) .owner-only { display: none !important; }
+body.owner .brand small::after { content: ' · OWNER'; color: var(--gold); }
+details.more { margin: 6px 0 10px; }
+details.more summary { cursor: pointer; color: var(--muted); font-weight: 700; padding: 6px 0; }
+.nav button { font-size: 11px; }
+.wide-order { width: 100%; margin: 4px 0 10px; min-height: 92px; font-size: 22px; }

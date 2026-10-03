@@ -216,13 +216,14 @@ const VIEWS = {
   home: homeView, order: orderView, kitchen: kitchenView, expense: expenseView, stock: stockView,
   report: reportView, history: historyView, shift: shiftView, recipe: recipeView,
 };
+const isOwner = () => localStorage.getItem('sho_owner') === '1';
 function render() {
+  if (['report', 'history', 'kitchen'].includes(state.view) && !isOwner()) state.view = 'home';
+  document.body.classList.toggle('owner', isOwner());
   $('#app').innerHTML = (VIEWS[state.view] || homeView)();
   $$('.nav button').forEach(b => b.classList.toggle('active', b.dataset.view === state.view));
   const q = cartQty(), badge = $('[data-order-badge]');
   badge.textContent = q > 99 ? '99+' : q; badge.hidden = q === 0;
-  const waiting = kitchenQueue().length, kb = $('[data-kitchen-badge]');
-  kb.textContent = waiting; kb.hidden = waiting === 0;
   updateSyncBadge();
   bind();
 }
@@ -261,12 +262,21 @@ function registerCard() {
   return `<button class="card reg-card" data-go="shift"><b>💵 Register open · since ${hhmm(s.openedAt)} (${esc(s.openedBy)})</b>
     <small>Cash that should be in the drawer now: <b>${peso(f.expectedCash)}</b> · GCash sales ${peso(f.gcashSales)}</small></button>`;
 }
+// HOME (owner 2026-10-03): staff see only their check in / out, the register, stock warnings and ORDER.
+// Sales figures are for the owner (owner mode = tap the 昇 logo 5 times).
 function homeView() {
-  const t = totals();
-  const waiting = kitchenQueue().length;
-  return `${staffCard()}${registerCard()}
+  const staffPart = `${staffCard()}${registerCard()}
   ${needsAfternoonCheck() ? '<button class="card todo check" data-stock-check-go><b>⏰ 15:00 stock check</b><small>Check before the dinner rush so there is time to prep.</small></button>' : ''}
   ${todoCard(false)}
+  <button class="btn big-btn primary wide-order" data-go="order">🍜 ORDER<small>Take an order</small></button>
+  <div class="grid2">
+    <button class="btn big-btn" data-go="stock">📦 STOCK<small>Check / count stock</small></button>
+    <button class="btn big-btn" data-go="expense">🧾 BUY<small>Record a purchase</small></button>
+  </div>
+  <button class="btn btn-wide" data-go="recipe">📖 RECIPES <small>Bowl SOP</small></button>`;
+  if (!isOwner()) return staffPart;
+  const t = totals();
+  return `${staffPart}
   <div class="card hero">
     <div class="label">TODAY SALES · ${dateKey()}</div>
     <div class="big">${peso(t.sales)}</div>
@@ -278,12 +288,9 @@ function homeView() {
     </div>
   </div>
   <div class="grid2">
-    <button class="btn big-btn primary" data-go="order">🍜 ORDER<small>Take an order</small></button>
-    <button class="btn big-btn kitchen-btn" data-go="kitchen">👨‍🍳 KITCHEN<small>${waiting} waiting</small></button>
-    <button class="btn big-btn" data-go="expense">🧾 EXPENSE<small>Record a cost</small></button>
-    <button class="btn big-btn danger-soft" data-go="shift">💵 SHIFT<small>Open / close register</small></button>
+    <button class="btn big-btn" data-go="report">📊 REPORT<small>Sales · shifts · expenses</small></button>
+    <button class="btn big-btn" data-go="history">🕘 HISTORY<small>Fix orders / expenses</small></button>
   </div>
-  <button class="btn btn-wide" data-go="recipe">📖 RECIPES <small>Bowl SOP</small></button>
   <div class="card">
     <div class="section-title">Today’s summary <small class="muted">(all devices)</small></div>
     <div class="row"><span>Cash</span><b>${peso(t.cash)}</b></div>
@@ -416,8 +423,6 @@ function checkoutView() {
       </div></div>
     <div class="field"><label>Guests <small class="muted">(people)</small></label>
       <span class="stepper big"><button data-guests="-1">−</button><b>${guests}</b><button data-guests="1">＋</button></span></div>
-    <div class="field"><label>Table no. / customer name</label>
-      <input class="input" id="orderRef" maxlength="20" placeholder="e.g. T3 or Maria" value="${esc(state.ref)}"></div>
     <div class="field"><label>Payment</label>
       <div class="grid2">
         <button class="btn ${state.payment === 'CASH' ? 'primary' : ''}" data-pay="CASH">CASH</button>
@@ -428,9 +433,13 @@ function checkoutView() {
       <div class="quick-cash">${[total, 200, 300, 500, 1000].filter((v, i, a) => v >= total && a.indexOf(v) === i).slice(0, 4).map(v => `<button class="chip" data-cash="${v}">${peso(v)}</button>`).join('')}</div>
       ${given ? `<div class="row change ${given < total ? 'short' : ''}"><span>${given < total ? 'Short' : 'Change'}</span><b>${peso(Math.abs(given - total))}</b></div>` : ''}
     </div>` : ''}
-    <div class="field"><label>Order date &amp; time</label>
-      <input class="input" id="orderDateTime" type="datetime-local" value="${dt}">
-      <small class="muted">Only change this for a missed entry.</small></div>
+    <details class="more" ${state.ref || isEdit || state.orderDateTime ? 'open' : ''}><summary>▸ More options (table / name, date &amp; time)</summary>
+      <div class="field"><label>Table no. / customer name</label>
+        <input class="input" id="orderRef" maxlength="20" placeholder="e.g. T3 or Maria" value="${esc(state.ref)}"></div>
+      <div class="field"><label>Order date &amp; time</label>
+        <input class="input" id="orderDateTime" type="datetime-local" value="${dt}">
+        <small class="muted">Only change this for a missed entry.</small></div>
+    </details>
     <div class="row total-row"><span>TOTAL</span><b class="grand">${peso(total)}</b></div>
     <button class="btn primary wide" data-complete>${isEdit ? 'SAVE CHANGES' : 'COMPLETE ORDER'}</button>
     ${isEdit ? '<button class="btn wide" data-cancel-edit>Cancel edit</button>' : ''}
@@ -1687,6 +1696,12 @@ function bind() {
 
 /* ── boot ──────────────────────────────────────────────── */
 $$('.nav button').forEach(b => { b.onclick = () => go(b.dataset.view); });
+(() => { let taps = [];
+  $('.brand').addEventListener('click', () => {
+    const now = Date.now(); taps = taps.filter(t => now - t < 3000); taps.push(now);
+    if (taps.length >= 5) { taps = []; const on = !isOwner(); localStorage.setItem('sho_owner', on ? '1' : '0'); toast(on ? 'Owner mode ON' : 'Owner mode OFF'); if (!on) state.view = 'home'; render(); }
+  });
+})();
 function tick() { $('#clock').textContent = new Date().toLocaleString('en-PH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 tick(); setInterval(tick, 15000);
 initMenu(); initPresets(); initInventory();
