@@ -305,3 +305,8 @@ details.more summary { cursor: pointer; color: var(--muted); font-weight: 700; p
 .shift-sales { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 6px 0 12px; }
 .shift-sales .label { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: .03em; }
 .shift-sales .big { font-size: 30px; font-weight: 800; margin: 2px 0 6px; }
+
+.shift-orders .so-row { border-top: 1px solid var(--line); padding: 8px 0; }
+.shift-orders .so-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.shift-orders .so-head span { color: var(--muted); font-size: 13px; flex: 1; text-align: right; padding-right: 6px; }
+.shift-orders .so-items { font-size: 14px; margin-top: 2px; line-height: 1.45; }

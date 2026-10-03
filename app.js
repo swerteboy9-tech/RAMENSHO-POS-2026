@@ -1033,8 +1033,19 @@ function sessionFigures(s) {
     ownerSpend: es.filter(e => e.payment === 'OWNER' && isSpend(e)).reduce((a, e) => a + e.amount, 0),
     expectedCash: (Number(s.openingCash) || 0) + m.cash + cash.in - cash.out,
     expectedGcash: s.openingGcash == null ? null : Number(s.openingGcash) + m.gcash + gc.in - gc.out,
-    entries: es, moves: mv, stock,
+    entries: es, moves: mv, stock, list: os,
   };
+}
+// This shift's orders, newest first — read only, for checking against the cash at closing (owner 2026-10-03)
+function shiftOrdersHTML(f, open) {
+  const list = f.list.slice().sort((a, b) => recStamp(b).localeCompare(recStamp(a)));
+  if (!list.length) return '<div class="muted small-title">No orders in this shift yet.</div>';
+  return `<details class="more shift-orders" ${open ? 'open' : ''}><summary>📋 Orders in this shift (${list.length})</summary>
+    ${list.map(o => {
+      const items = o.items.map(l => `${l.qty}× ${esc(l.name)}${(l.toppings || []).length ? ` <small class="muted">+ ${l.toppings.map(t => esc(t.name) + (t.qty > 1 ? ' ×' + t.qty : '')).join(', ')}</small>` : ''}`).join('<br>');
+      return `<div class="so-row"><div class="so-head"><b>#${o.no || '—'} · ${esc(o.time)}</b><span>${o.payment === 'GCASH' ? '📱 GCash' : '💵 Cash'} · ${o.mode === 'TAKEOUT' ? '🥡' : '🍽️'}</span><b>${peso(o.total)}</b></div><div class="so-items">${items}</div></div>`;
+    }).join('')}
+  </details>`;
 }
 // A closed session is stale when an order / payment inside it was changed afterwards.
 function sessionStale(s) {
@@ -1082,6 +1093,7 @@ function shiftView() {
     ${moneyRows.length ? `<hr><div class="muted small-title">Money in / out this shift</div>${moneyRows.map(e => `<div class="row sub"><span>${esc(e.item)} · ${entryLabel(e)}${e.staff ? ' · ' + esc(e.staff) : ''}</span><span>${peso(e.amount)}</span></div>`).join('')}` : ''}
     ${f.ownerSpend ? `<div class="row sub"><span>Paid by owner (not in the count)</span><span>${peso(f.ownerSpend)}</span></div>` : ''}
     <div class="row"><span>Total sales this shift</span><b>${peso(f.totalSales)}</b></div>
+    ${shiftOrdersHTML(f, false)}
     <button class="btn wide" data-money-form>💱 Money in / out (top-up · removal · transfer)</button>
     <button class="btn danger wide" data-reg-close>CLOSE REGISTER · count cash, GCash &amp; stock</button>
   </div>${sessionHistory()}`;
@@ -1121,6 +1133,7 @@ function closeRegisterForm(s) {
       <div class="row"><span>💵 Cash sales</span><b>${peso(f.cashSales)}</b></div>
       <div class="row"><span>📱 GCash sales</span><b>${peso(f.gcashSales)}</b></div>
       ${f.cashOut ? `<div class="row sub"><span>Paid from the drawer (purchases, meal, advance…)</span><span>−${peso(f.cashOut)}</span></div>` : ''}
+      ${shiftOrdersHTML(f, false)}
     </div>
     <div class="row sub"><span>Opening ${peso(s.openingCash)} + cash sales ${peso(f.cashSales)}${f.cashIn ? ' + in ' + peso(f.cashIn) : ''} − paid from drawer ${peso(f.cashOut)}</span></div>
     <div class="row total-row"><span>Should be in the drawer</span><b id="expCash" data-v="${f.expectedCash}">${peso(f.expectedCash)}</b></div>
